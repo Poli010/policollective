@@ -1,10 +1,11 @@
 'use client'
 import Link from "next/link";
-import { User, ShoppingCart, Menu, X } from "lucide-react";
+import { LogOut, ShoppingCart, Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import DarkMode from "./DarkMode";
 import { useTheme } from "next-themes";
 import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 export default function SideBar({setShowLoginModal}){
     const [isLogin, setIsLogin] = useState(false);
@@ -42,6 +43,7 @@ export default function SideBar({setShowLoginModal}){
                     <div className="px-5 py-3 lg:px-0">
                         <DarkMode theme={theme} setTheme={setTheme}/>
                     </div>
+                    {session ? (<div className="px-5"><LogOut className="cursor-pointer hover:text-blue-500 transition duration-500" onClick={() => signOut("google")} /></div>) : (<div className="hidden">asd</div>)}
                 </div>
             </div>
         </>

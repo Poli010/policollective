@@ -1,8 +1,6 @@
 
 import "./globals.css";
 import { Poppins } from "next/font/google";
-import { ThemeProvider } from "next-themes";
-import { SessionProvider } from "next-auth/react";
 import Providers from "./api/auth/[...nextauth]/Provider/Providers";
 
 const poppins = Poppins({
@@ -14,7 +12,7 @@ export const metadata = {
   title: "Poli Collective",
   description: "Store of Poli Collective",
   icons: {
-    icon: "/Logo/LOGO.png"
+    icon: "/Logo/icon.png"
   }
   
 };

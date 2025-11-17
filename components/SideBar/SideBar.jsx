@@ -25,8 +25,8 @@ export default function SideBar({setShowLoginModal}){
     return(
         <>  
             {isOpen ? (<X  className="fixed top-3 right-27 z-22 cursor-pointer lg:hidden" size={30} onClick={() => setIsOpen(false)}/>) : (<Menu className="absolute top-3 left-3 lg:hidden cursor-pointer" onClick={() => setIsOpen(true)} size={30}/>) }
-            <div className={`fixed top-0 left-0 h-screen bg-gray-100  px-5 shadow-lg z-20 transform transition-transform duration-500 ease-in-out w-[80%] lg:flex lg:h-25 lg:w-full lg:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"} ${theme === 'dark' ? 'bg-gray-500' : ''}`}>
-                <img src='/Logo/landing.png' alt="Poli Collective Logo" title="Poli Collective Logo" className="w-[100px] cursor-pointer"/>
+            <div className={`fixed top-0 left-0 h-screen bg-gray-100  px-5 shadow-lg z-20 transform transition-transform duration-500 ease-in-out w-[80%] lg:flex lg:h-25 lg:w-full lg:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"} ${theme === 'dark' ? 'bg-gray-800' : ''}`}>
+                {theme === 'dark' ? (<img src='/Logo/darkMode_logo.png' alt="Poli Collective Logo" title="Poli Collective Logo" className="w-[100px] cursor-pointer"/>) : (<img src='/Logo/landing.png' alt="Poli Collective Logo" title="Poli Collective Logo" className="w-[100px] cursor-pointer"/>) }
                 <div className=" text-lg flex flex-col lg:flex-row lg:items-center lg:w-full lg:justify-end">
                     <Link href="/" className="px-5 py-3 hover:text-blue-500 transition duration-500">Home</Link>
                     <Link href="/Shop_Now" className="px-5 py-3 hover:text-blue-500 transition duration-500">Shop Now</Link>

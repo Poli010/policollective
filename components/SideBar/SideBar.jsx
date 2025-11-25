@@ -1,6 +1,6 @@
 'use client'
 import Link from "next/link";
-import { LogOut, ShoppingCart, Menu, X } from "lucide-react";
+import { LogOut, ShoppingCart, Menu, X, User } from "lucide-react";
 import { useState, useEffect } from "react";
 import DarkMode from "./DarkMode";
 import { useTheme } from "next-themes";
@@ -13,7 +13,7 @@ export default function SideBar({setShowLoginModal}){
     const {theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const { data: session } = useSession();
-    
+    const [session2, setSession2] = useState(false);
       useEffect(() => {
         setMounted(true);
       }, []);
@@ -37,12 +37,12 @@ export default function SideBar({setShowLoginModal}){
                         <Link href="/" className="px-5 hover:text-blue-500 transition duration-500 "><ShoppingCart size={25}/></Link>
                     </div>
                     <div className="px-5 hidden lg:block">
-                        {session ? (<img src={session.user.image} alt="Poli Collective Logo" title={session.user.name}className="w-10 cursor-pointer rounded-full"/>) : ( <button className="px-5 cursor-pointer bg-black h-10 w-22 text-white rounded-md hover:bg-gray-500 transition duration-500 text-sm" onClick={() => setShowLoginModal(true)}>Login</button>)}
+                        {session || session2 ? (session2 ? (<div className="p-2 border rounded-md cursor-pointer hover:border-blue-500 hover:text-blue-500 transition duration-500"><User/></div>) : (<img src={ session.user.image} alt="Poli Collective Logo" title={session.user.name} className="w-10 cursor-pointer rounded-full"/>)) : ( <button className="px-5 cursor-pointer bg-black h-10 w-22 text-white rounded-md hover:bg-gray-500 transition duration-500 text-sm" onClick={() => setShowLoginModal(true)}>Login</button>)}
                     </div>
                     <div className="px-5 py-3 lg:px-0">
                         <DarkMode theme={theme} setTheme={setTheme}/>
                     </div>
-                    {session ? (<div className="px-5"><LogOut className="cursor-pointer hover:text-blue-500 transition duration-500 hidden lg:block" onClick={() => signOut("google")} /></div>) : (<div className="hidden">asd</div>)}
+                    {session || session2 ? (<div className="px-5"><LogOut className="cursor-pointer hover:text-blue-500 transition duration-500 hidden lg:block" onClick={() => {signOut("google"), setSession2(false)}} /></div>) : (<div className="hidden">asd</div>)}
                 </div>
             </div>
             <div className="flex items-center justify-end py-3 px-3 lg:hidden">
@@ -50,8 +50,8 @@ export default function SideBar({setShowLoginModal}){
                     {cartCount ? (<div className="absolute bg-red-500 text-white w-5 h-5 flex items-center justify-center rounded-full text-sm top-1 ml-5">1</div>) : (<div className="hidden">1</div>)}
                     <Link href="/" className="px-5 hover:text-blue-500 transition duration-500 "><ShoppingCart size={25}/></Link>
                 </div>
-                {session ? (<img src={session.user.image} alt="Poli Collective Logo" title={session.user.name}className="w-10 cursor-pointer rounded-full"/>) : ( <button className="px-5 cursor-pointer bg-black h-10 w-22 text-white rounded-md hover:bg-gray-700 transition duration-500 text-sm" onClick={() => setShowLoginModal(true)}>Login</button>)}
-                {session ? (<div className="pl-3"><LogOut className="cursor-pointer hover:text-blue-500 transition duration-500 " onClick={() => signOut("google")} /></div>) : (<div className="hidden">asd</div>)}
+                {session || session2 ? (session2 ? (<div className="p-2 border rounded-md cursor-pointer hover:border-blue-500 hover:text-blue-500 transition duration-500"><User/></div>) : (<img src={session.user.image} alt="Poli Collective Logo" title={session.user.name}className="w-10 cursor-pointer rounded-full"/>)) : ( <button className="px-5 cursor-pointer bg-black h-10 w-22 text-white rounded-md hover:bg-gray-700 transition duration-500 text-sm" onClick={() => setShowLoginModal(true)}>Login</button>)}
+                {session || session2 ? (<div className="pl-3"><LogOut className="cursor-pointer hover:text-blue-500 transition duration-500 " onClick={() => {signOut("google"), setSession2(false)}} /></div>) : (<div className="hidden">asd</div>)}
       
             </div>
         </>

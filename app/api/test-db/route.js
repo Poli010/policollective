@@ -6,6 +6,6 @@ export async function GET() {
         return Response.json({ success: true, time: rows[0].now });
     } catch (error) {
         console.error(error);
-        return Response.json({ success: false, error: error.message });
+        return Response.json({ failed: false, error: error.message });
     }
 }

@@ -3,8 +3,9 @@ import { useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { CircleAlert } from "lucide-react";
+import { CircleAlert, Loader } from "lucide-react";
 import axios from "axios";
+
 
 export default function Sign_Up(){
     const router = useRouter();
@@ -17,6 +18,7 @@ export default function Sign_Up(){
     const [confirm_password, setConfirm_Password] = useState('');
     const {theme} = useTheme();
     const [mounted, setMounted] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -37,21 +39,25 @@ export default function Sign_Up(){
 
     const createAccount = (e) => {
         e.preventDefault();
+        setIsClicked(true);
         if(password !== confirm_password){
             setIsPasswordnotMatch(true);
+            setIsClicked(false);
         }
         else{
-            axios.post('api/Sign_Up',{
+            axios.post('api/auth/Sign_Up',{
                 fullname: fullname,
                 email: email,
                 password: password
             }).then(response => {
                 if(response.status === 200){
+                    localStorage.setItem("email", email);
                     router.push("/Sign_Up/Verify_Account")
                 }
             }).catch(error => {
                 if(error.response.status === 500){
                     console.log(error.response.data.message);
+                    setIsClicked(false);
                 }
             })
         }
@@ -60,7 +66,7 @@ export default function Sign_Up(){
         <>  
         {theme === 'dark' ? (<img src="/Logo/darkMode_logo.png" className="w-[100px] cursor-pointer fixed ml-5" onClick={backtoHome}/>) : (<img src="/Logo/landing.png" className="w-[100px] cursor-pointer fixed ml-5" onClick={backtoHome}/>)}
             <div className=" border h-screen flex items-center justify-center">
-                <form className="shadow-2xl w-[95%] sm:w-[70%] md:w-[60%] lg:w-[45%] xl:w-[30%] min-h-96 dark:bg-gray-800 rounded-md" onSubmit={createAccount}>
+                <form className="shadow-2xl w-[95%] sm:w-[70%] md:w-[60%] lg:w-[45%] xl:w-[450px] min-h-96 dark:bg-gray-800 rounded-md" onSubmit={createAccount}>
                     <h1 className="text-center font-bold text-2xl mt-2">Sign Up</h1>
                     <div className="px-6 md:px-10 py-3">
                         <div className="flex flex-col py-3">
@@ -85,7 +91,7 @@ export default function Sign_Up(){
                             <label htmlFor="showPassword" className="ml-2">Show Password</label>
                         </div>
                         <div className="py-3">
-                            <button className="border w-full p-2 bg-black text-white rounded-md cursor-pointer hover:bg-gray-500 transition duration-500">Create Account</button>
+                            {isClicked ? (<button className="border w-full p-2 bg-black opacity-90 text-white rounded-md flex justify-center" disabled><Loader className="animate-spin"/></button>) : ( <button className="border w-full p-2 bg-black text-white rounded-md cursor-pointer hover:bg-gray-500 transition duration-500">Create Account</button>)}
                         </div>
                     </div>
                 </form>

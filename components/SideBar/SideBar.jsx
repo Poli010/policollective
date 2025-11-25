@@ -16,6 +16,13 @@ export default function SideBar({setShowLoginModal}){
     const [session2, setSession2] = useState(false);
       useEffect(() => {
         setMounted(true);
+        const ifSessionActive = sessionStorage.getItem("session2");
+        if(ifSessionActive){
+            setSession2(true);
+        }
+        else{
+            setSession2(false);
+        }
       }, []);
       // Prevent SSR mismatch
       if (!mounted) {
@@ -42,7 +49,7 @@ export default function SideBar({setShowLoginModal}){
                     <div className="px-5 py-3 lg:px-0">
                         <DarkMode theme={theme} setTheme={setTheme}/>
                     </div>
-                    {session || session2 ? (<div className="px-5"><LogOut className="cursor-pointer hover:text-blue-500 transition duration-500 hidden lg:block" onClick={() => {signOut("google"), setSession2(false)}} /></div>) : (<div className="hidden">asd</div>)}
+                    {session || session2 ? (<div className="px-5"><LogOut className="cursor-pointer hover:text-blue-500 transition duration-500 hidden lg:block" onClick={() => {signOut("google"), setSession2(false), sessionStorage.removeItem("session2")}} /></div>) : (<div className="hidden">asd</div>)}
                 </div>
             </div>
             <div className="flex items-center justify-end py-3 px-3 lg:hidden">
@@ -51,7 +58,7 @@ export default function SideBar({setShowLoginModal}){
                     <Link href="/" className="px-5 hover:text-blue-500 transition duration-500 "><ShoppingCart size={25}/></Link>
                 </div>
                 {session || session2 ? (session2 ? (<div className="p-2 border rounded-md cursor-pointer hover:border-blue-500 hover:text-blue-500 transition duration-500"><User/></div>) : (<img src={session.user.image} alt="Poli Collective Logo" title={session.user.name}className="w-10 cursor-pointer rounded-full"/>)) : ( <button className="px-5 cursor-pointer bg-black h-10 w-22 text-white rounded-md hover:bg-gray-700 transition duration-500 text-sm" onClick={() => setShowLoginModal(true)}>Login</button>)}
-                {session || session2 ? (<div className="pl-3"><LogOut className="cursor-pointer hover:text-blue-500 transition duration-500 " onClick={() => {signOut("google"), setSession2(false)}} /></div>) : (<div className="hidden">asd</div>)}
+                {session || session2 ? (<div className="pl-3"><LogOut className="cursor-pointer hover:text-blue-500 transition duration-500 " onClick={() => {signOut("google"), setSession2(false), sessionStorage.removeItem("session2")}} /></div>) : (<div className="hidden">asd</div>)}
       
             </div>
         </>

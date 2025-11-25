@@ -37,7 +37,7 @@ export default function SideBar({setShowLoginModal}){
                         <Link href="/" className="px-5 hover:text-blue-500 transition duration-500 "><ShoppingCart size={25}/></Link>
                     </div>
                     <div className="px-5 hidden lg:block">
-                        {session ? (<img src={session.user.image} alt="Poli Collective Logo" title={session.user.name}className="w-10 cursor-pointer rounded-full"/>) : ( <button className="px-5 cursor-pointer bg-black h-10 w-22 text-white rounded-md hover:bg-gray-700 transition duration-500 text-sm" onClick={() => setShowLoginModal(true)}>Login</button>)}
+                        {session ? (<img src={session.user.image} alt="Poli Collective Logo" title={session.user.name}className="w-10 cursor-pointer rounded-full"/>) : ( <button className="px-5 cursor-pointer bg-black h-10 w-22 text-white rounded-md hover:bg-gray-500 transition duration-500 text-sm" onClick={() => setShowLoginModal(true)}>Login</button>)}
                     </div>
                     <div className="px-5 py-3 lg:px-0">
                         <DarkMode theme={theme} setTheme={setTheme}/>

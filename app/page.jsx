@@ -1,5 +1,5 @@
 'use client'
-import Login from "@/components/Login_Modal/Login";
+import Login from "@/components/Modal/Login_Modal/Login";
 import SideBar from "@/components/SideBar/SideBar";
 import { useState } from "react";
 import { useTheme } from "next-themes";
@@ -18,7 +18,7 @@ export default function Index(){
             <h1 className="font-bold text-3xl">Poli Collective</h1>
             <p className="text-justify text-[12pt] mt-2">"Poli Collective is a lifestyle brand that blends faith, style, and urban energy. We create clothing that inspires confidence and self-expression through Christian wear, streetwear, minimalist designs, and sports-inspired apparel. Our mission is to empower individuals to wear their beliefs and passions proudly, while staying bold, comfortable, and effortlessly stylish in every aspect of life."</p>
 
-              <Link href="/Shop_Now" className="flex items-center justify-center mt-2 bg-black text-white w-full h-10 rounded-md hover:bg-gray-700 cursor-pointer transition duration-500">Shop Now</Link>
+              <Link href="/Shop_Now" className="flex items-center justify-center mt-2 bg-black text-white w-full h-10 rounded-md hover:bg-gray-500 cursor-pointer transition duration-500">Shop Now</Link>
 
             
           </div>

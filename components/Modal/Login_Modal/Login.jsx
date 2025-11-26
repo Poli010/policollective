@@ -33,6 +33,8 @@ export default function Login({showLoginModal, setShowLoginModal, theme}){
             password: password
         }).then(response => {
             if(response.data.role === "admin"){
+                localStorage.setItem("active-link", "dashboard");
+                localStorage.setItem("email", email);
                 router.push('/Admin_Page');
             }
             else if(response.data.role === "end_user"){
@@ -59,7 +61,7 @@ export default function Login({showLoginModal, setShowLoginModal, theme}){
         <>
             <div className={`fixed top-0 bg-black h-screen w-full z-21 opacity-50 ${showLoginModal ? 'scale-100' : 'scale-0'}`} onClick={() => setShowLoginModal(false)}></div>
             <div className={`fixed top-1/2 left-1/2 transform transition duration-500 -translate-x-1/2 -translate-y-1/2  shadow-2xl min-h[400px] w-[95%] sm:w-[60%] md:w-[50%] lg:w-[40%] xl:w-[450px] py-5 rounded-md z-22 ${showLoginModal ? 'scale-100' : 'scale-0'} ${theme === "dark" ? 'bg-gray-800' : 'bg-white'}`}>
-                <form className="px-10">
+                <form className="px-10" onSubmit={Login}>
                     <h1 className="font-bold text-center text-xl">Login</h1>
                     <div className="flex flex-col mt-5">
                         <label htmlFor="Email">Email:</label>
@@ -83,7 +85,7 @@ export default function Login({showLoginModal, setShowLoginModal, theme}){
                         <Login_with_Google_btn theme={theme}/>
                     </div>
                     <div className="mt-3">
-                        {isClicked ? (<button className="text-white bg-black w-full h-9 rounded-md opacity-80 flex justify-center items-center"><Loader className="animate-spin"/></button>) : (<button className="text-white bg-black w-full h-9 rounded-md cursor-pointer hover:bg-gray-700 duration-500" onClick={Login}>Login</button>)}
+                        {isClicked ? (<button type="button" className="text-white bg-black w-full h-9 rounded-md opacity-80 flex justify-center items-center"><Loader className="animate-spin"/></button>) : (<button className="text-white bg-black w-full h-9 rounded-md cursor-pointer hover:bg-gray-700 duration-500">Login</button>)}
                         
                     </div>
                     <div className="mt-3 text-center">

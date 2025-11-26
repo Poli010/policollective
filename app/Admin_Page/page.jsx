@@ -3,28 +3,13 @@ import Admin_SideBar from "@/components/Admin_Page/Admin_SideBar/Admin_SideBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { Bell, User, PhilippinePeso, TrendingUp } from "lucide-react";
+import { PhilippinePeso, TrendingUp } from "lucide-react";
 import Area_Chart from "@/components/Admin_Page/Chart/Area_Chart";
+import Admin_Header from "@/components/Admin_Page/Admin_Header/Admin_Header";
 
 
 export default function Admin_Page(){
-    const router = useRouter();
-    const [user, setUser] = useState([]);
 
-    useEffect(() => {
-        const whatIsEmail = localStorage.getItem("email");
-        axios.get('/api/admin_page/dashboard',{
-            params: {email: whatIsEmail}
-        }).then(response => {
-            if(response.status === 200){
-                setUser(response.data.result)
-            }
-        }).catch(error => {
-            if(error.response.status === 404 || error.response.status === 500){
-                router.push("/");
-            }
-        })
-    }, []);
     return(
         <>
             <div className="flex max-w-400 mx-auto">
@@ -32,21 +17,7 @@ export default function Admin_Page(){
                 <div className="w-full pt-5 px-7 bg-gray-50">
 
                     {/*--------------------DASHBOARD HEADER---------------*/}
-                    <div className="flex justify-between">
-                        <div>
-                            <p className="text-gray-500 text-[12pt]">Welcome back, {user.fullname} 👋</p>
-                            <h1 className="font-semibold text-5xl mt-1">Dashboard</h1>
-                        </div>
-                        <div className="flex h-9 items-center">
-                            <div>
-                                <div className="absolute ml-3 -mt-3 bg-red-500 text-white rounded-full w-5 h-5 text-center">1</div>
-                                <Bell/>
-                            </div>
-                            <div className="p-2 border rounded-md cursor-pointer hover:border-blue-500 hover:text-blue-500 transition duration-500 ml-3">
-                                <User />
-                            </div>
-                        </div>
-                    </div>
+                    <Admin_Header/>
                     {/*--------------------DASHBOARD HEADER END---------------*/}
 
 

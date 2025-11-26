@@ -44,7 +44,7 @@ const chartConfig = {
 
 export default function Area_Chart() {
   return (
-    <Card className="h-[50vh] w-full">
+    <Card className="h-[50vh] w-full dark:bg-gray-900 dark:border-gray-900">
         <CardHeader>
             <CardTitle>Sales Report</CardTitle>
             <CardDescription>Showing total sales of the year 2025</CardDescription>

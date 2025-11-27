@@ -11,7 +11,6 @@ export default function Products(){
                 <Admin_SideBar idebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}/>
                 <div className={`w-full pt-5 px-4 md:px-7 bg-gray-50 dark:bg-gray-950 ${isSidebarOpen ? 'h-screen overflow-hidden' : ''}`}>
                     <Admin_Header/>
-
                 </div>
             </div>
         </>

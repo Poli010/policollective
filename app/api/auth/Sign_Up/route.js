@@ -6,7 +6,7 @@ import { generate_accountID } from "@/lib/generate_accountID";
 export async function POST(request) {
     try{
         const db = await connectToDatabase();
-        const {fullname, email, password} = await request.json();
+        const {fullname, email, phoneNumber, password} = await request.json();
         const hashedPassword = await bcrypt.hash(password, 10);
         const verificationCode = Math.floor(100000 + Math.random() * 900000);
         const accountID = await generate_accountID(db);
@@ -28,8 +28,8 @@ export async function POST(request) {
                 html: htmlContent
             });
             if(result.success){
-                const [rows] = await db.execute("INSERT INTO user_accounts (account_id, fullname, email, password, account_type, verification_code, verification_confirmation) VALUES (?, ?, ?, ?, ?, ?, ?)", 
-                [accountID, fullname, email, hashedPassword, 'end_user', verificationCode, '']);
+                const [rows] = await db.execute("INSERT INTO user_accounts (account_id, fullname, email, contact_number, password, account_type, verification_code, verification_confirmation) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
+                [accountID, fullname, email, phoneNumber, hashedPassword, 'end_user', verificationCode, null]);
                 if(rows.affectedRows > 0){
                     return Response.json({message: "Sent Success"}, {status: 200});
                 }

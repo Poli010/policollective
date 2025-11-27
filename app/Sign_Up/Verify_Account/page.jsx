@@ -54,7 +54,6 @@ export default function Verify_Account(){
             if(response.status === 200){
                 setIsCreated(true);
                 setIsClicked(false);
-                localStorage.removeItem('email');
             }
         }).catch(error => {
             if(error.response.status === 400){

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { CircleAlert, Loader } from "lucide-react";
 import axios from "axios";
+import PhoneInput from 'react-phone-input-2';
 
 
 export default function Sign_Up(){
@@ -19,6 +20,7 @@ export default function Sign_Up(){
     const {theme} = useTheme();
     const [mounted, setMounted] = useState(false);
     const [isClicked, setIsClicked] = useState(false);
+    const [phoneNumber, setPhoneNumber] = useState('');
 
     useEffect(() => {
         setMounted(true);
@@ -48,6 +50,7 @@ export default function Sign_Up(){
             axios.post('api/auth/Sign_Up',{
                 fullname: fullname,
                 email: email,
+                phoneNumber: phoneNumber,
                 password: password
             }).then(response => {
                 if(response.status === 200){
@@ -76,6 +79,26 @@ export default function Sign_Up(){
                         <div className="flex flex-col py-3">
                             <label htmlFor="email">Email:</label>
                             <input type="email" id="email" className="border border-black rounded-md h-9 px-2 outline-blue-500 dark:border-white" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                        </div>
+                        <div className="flex flex-col py-3">
+                            <label htmlFor="contact_number">Mobile Number:</label>
+                            <label htmlFor="contact_number" className="border border-black rounded-md flex items-center h-9  outline-blue-500 dark:border-white">
+                            <PhoneInput
+                                country={'ph'} // default country
+                                value={phoneNumber}
+                                onChange={setPhoneNumber}
+                                inputProps={{
+                                name: 'phone',
+                                required: true,
+                                id: 'contact_number',
+                                }}
+                                containerClass=""
+                                inputClass="!border-none !bg-transparent"
+                                buttonClass="!border-r-black !rounded-l-md !bg-transparent !hover:bg-none dark:!border-r-white"
+                                dropdownClass="!rounded-md !border !border-black dark:!border-white dark:!bg-gray-900"
+                            />
+                            </label>
+
                         </div>
                         <div className="flex flex-col py-3">
                             <label htmlFor="password">Password:</label>

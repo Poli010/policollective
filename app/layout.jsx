@@ -2,6 +2,8 @@
 import "./globals.css";
 import { Poppins } from "next/font/google";
 import Providers from "./api/auth/[...nextauth]/Provider/Providers";
+// In your component or _app.js
+import 'react-phone-input-2/lib/style.css';
 
 const poppins = Poppins({
   subsets: ["latin"],

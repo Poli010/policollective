@@ -2,6 +2,7 @@ import { useRouter } from "next/navigation";
 export default function Success_Modal({isCreated}){
     const router = useRouter();
     const backToHome = () => {
+        localStorage.removeItem('email');
         router.push('/');
     }
     return(

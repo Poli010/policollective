@@ -7,9 +7,8 @@ import { useTheme } from "next-themes";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 
-export default function SideBar({setShowLoginModal}){
+export default function SideBar({setShowLoginModal, isOpen, setIsOpen}){
     const [cartCount, setCartCount] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
     const {theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const { data: session } = useSession();

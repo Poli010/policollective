@@ -4,14 +4,17 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import DarkMode from "@/components/SideBar/DarkMode";
 import { useTheme } from "next-themes";
+import { ToTitleCase } from "@/lib/TitleCase";
 
 export default function Admin_Header(){
     const router = useRouter();
     const [user, setUser] = useState([]);
     const {theme, setTheme } = useTheme();
-
+    const [pageTitle, setPageTitle] = useState("");
     useEffect(() => {
         const whatIsEmail = localStorage.getItem("email");
+        const whatisPageTitle = localStorage.getItem("active-link");
+        setPageTitle(whatisPageTitle)
         axios.get('/api/admin_page/dashboard',{
             params: {email: whatIsEmail}
         }).then(response => {
@@ -30,7 +33,7 @@ export default function Admin_Header(){
             <div className="flex flex-col-reverse justify-between md:flex-row md:px-7 lg:px-0">
                 <div className="mt-5 md:mt-0">
                     <p className="text-gray-500 text-[12pt] dark:text-gray-300">Welcome back, {user.fullname} 👋</p>
-                    <h1 className="font-semibold text-5xl mt-1">Dashboard</h1>
+                    <h1 className="font-semibold text-5xl mt-1">{ToTitleCase(pageTitle)}</h1>
                 </div>
                 <div className="flex h-9 items-center justify-end">
                     <div className="ml-3 hover:border-blue-500 cursor-pointer hover:text-blue-500 transition duration-500">

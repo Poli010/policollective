@@ -4,11 +4,11 @@ import { LayoutDashboard, ShoppingCart, Wallet, Tag, LogOut, Menu, X } from "luc
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 
-export default function Admin_SideBar(){
+export default function Admin_SideBar({isSidebarOpen, setIsSidebarOpen}){
     const [activeLink, setActiveLink] = useState("");
     const [mounted, setMounted] = useState(false);
     const {theme} = useTheme();
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
 
     useEffect(() => {
         setMounted(true);
@@ -31,7 +31,7 @@ export default function Admin_SideBar(){
     }
     return(
         <>
-            <Menu className="fixed top-4 left-3 cursor-pointer lg:hidden " size={30} onClick={() => setIsSidebarOpen(true)}/>
+            <Menu className="absolute top-3 left-3 cursor-pointer lg:hidden " size={30} onClick={() => setIsSidebarOpen(true)}/>
             <div className={`fixed border-r border-gray-300 z-20 bg-white dark:border-r-gray-900 dark:bg-gray-900 shadow-2xl h-screen w-[80%] lg:static lg:opacity-100 lg:translate-0 lg:w-[25%] xl:w-[20%] px-3 transition-all duration-300 ${isSidebarOpen ? 'translate-x-0 opacity-100' : '-translate-x-full  opacity-0'}`}>
             <X className="absolute top-4 right-5 z-30 cursor-pointer lg:hidden" size={30} onClick={() => setIsSidebarOpen(false)}/>
                 {theme === "dark" ? (<img src="/Logo/darkMode_logo.png" alt="" className="w-25"/>) : (<img src="/Logo/landing.png" alt="" className="w-25"/>) }

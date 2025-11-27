@@ -8,11 +8,12 @@ import Link from "next/link";
 export default function Index(){
   const [showLoginModal, setShowLoginModal] = useState(false);
   const {theme} = useTheme();
+    const [isOpen, setIsOpen] = useState(false);
   return(
     <>
       <div className="h-screen max-w-400 mx-auto">
-        <SideBar setShowLoginModal={setShowLoginModal}/>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 place-items-center justify-center p-3 lg:p-10 xl:px-30 ">
+        <SideBar setShowLoginModal={setShowLoginModal} isOpen={isOpen} setIsOpen={setIsOpen}/>
+        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-5 place-items-center justify-center p-3 lg:p-10 xl:px-30 ${isOpen ? 'h-[90vh] overflow-hidden' : ''}`}>
           <img src="/model/home_model_transparent.png" className="w-[90%]"/>
           <div className="mt-3 max-w-[1000px]">
             <h1 className="font-bold text-[25pt]">Poli Collective</h1>
@@ -21,7 +22,7 @@ export default function Index(){
           </div>
         </div>
       </div>
-      <Login showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} theme={theme}/>
+      <Login showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} theme={theme} />
     </>
   );
 }

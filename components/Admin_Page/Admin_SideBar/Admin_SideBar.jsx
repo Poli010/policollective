@@ -37,10 +37,10 @@ export default function Admin_SideBar({isSidebarOpen, setIsSidebarOpen}){
                 {theme === "dark" ? (<img src="/Logo/darkMode_logo.png" alt="" className="w-25"/>) : (<img src="/Logo/landing.png" alt="" className="w-25"/>) }
                 <div className="">
                     <div className="py-2">
-                        <Link href="/Admin_Page" className={`flex h-10 items-center hover:bg-gray-700 hover:text-white rounded-lg px-2 transition  ${activeLink === "dashboard" ? 'bg-gray-700 text-white' : ''}`} onClick={() => handleActive("dashboard")}><LayoutDashboard/><span className="ml-2">Dashboard</span></Link>
+                        <Link href="/Admin_Page/Dashboard" className={`flex h-10 items-center hover:bg-gray-700 hover:text-white rounded-lg px-2 transition  ${activeLink === "dashboard" ? 'bg-gray-700 text-white' : ''}`} onClick={() => handleActive("dashboard")}><LayoutDashboard/><span className="ml-2">Dashboard</span></Link>
                     </div>
                     <div className="py-2">
-                        <Link href="#" className={`flex h-10 items-center hover:bg-gray-700 hover:text-white rounded-lg px-2 transition ${activeLink === "products" ? 'bg-gray-700 text-white' : ''}`} onClick={() => handleActive("products")}><Tag/><span className="ml-2">Products</span></Link>
+                        <Link href="/Admin_Page/Products" className={`flex h-10 items-center hover:bg-gray-700 hover:text-white rounded-lg px-2 transition ${activeLink === "products" ? 'bg-gray-700 text-white' : ''}`} onClick={() => handleActive("products")}><Tag/><span className="ml-2">Products</span></Link>
                     </div>
                     <div className="py-2">
                         <Link href="#" className={`flex h-10 items-center hover:bg-gray-700 hover:text-white rounded-lg px-2 transition  ${activeLink === "orders" ? 'bg-gray-700 text-white' : ''}`} onClick={() => handleActive("orders")}><ShoppingCart/><span className="ml-2">Orders</span></Link>

@@ -1,3 +1,4 @@
+'use client'
 import { Bell, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

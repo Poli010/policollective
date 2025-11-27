@@ -35,7 +35,7 @@ export default function Login({showLoginModal, setShowLoginModal, theme}){
             if(response.data.role === "admin"){
                 localStorage.setItem("active-link", "dashboard");
                 localStorage.setItem("email", email);
-                router.push('/Admin_Page');
+                router.push('/Admin_Page/Dashboard');
             }
             else if(response.data.role === "end_user"){
                 sessionStorage.setItem("session2", true);

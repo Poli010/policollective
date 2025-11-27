@@ -1,7 +1,7 @@
 import { connectToDatabase } from "@/lib/database_connection/db";
 import bcrypt from 'bcrypt';
 import sendEmail from "@/lib/sendMail";
-import { generate_accountID } from "@/lib/generate_accountID";
+import { generate_accountID } from "@/lib/generate_uniqueID/generate_accountID";
 
 export async function POST(request) {
     try{

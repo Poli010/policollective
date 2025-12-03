@@ -10,16 +10,25 @@ import { useEffect, useState } from "react";
 import Upload_Image from "../Upload_Image/upload_image";
 import Multiple_Image from "../Multiple_Image/multiple_image";
 import SizeChart_Upload from "../SizeChart_Upload/sizeChart_upload";
+import { description } from "../../Chart/Area_Chart";
 
 export default function Add_Product({openAddProducts, setOpenAddProducts}){
-    //IMAGE STATES
-    const [sizeChart, setSizeChart] = useState(null);
-    const [file, setFile] = useState(null);
-    const [files, setFiles] = useState([]);
-
-    //CATEGORY
-    const [category, setCategory] = useState("");
+    //CONTROL STATES
     const [isAddingCategory, setIsAddingCategory] = useState(false);
+
+    //DATA STATES
+    const [category, setCategory] = useState("");
+    const [addingCategory, setAddingCategory] = useState("");
+    const [item_name, setItem_name] = useState("");    
+    const [description, setDescription] = useState(""); 
+    const [item_price, setItem_price] = useState("");
+    const [discount_percentage, setdiscount_percentage] = useState("");
+    const [stock_quantity, setStock_quantity] = useState("");   
+    const [file, setFile] = useState(null);  //MAIN IMAGE
+    const [files, setFiles] = useState([]); //MULTIPLE IMAGE
+    const [sizeChart, setSizeChart] = useState(null);
+
+   
     useEffect(() => {
         if(category === "add_category"){
             setIsAddingCategory(true);
@@ -31,6 +40,17 @@ export default function Add_Product({openAddProducts, setOpenAddProducts}){
 
     const addProduct = (e) => {
         e.preventDefault();
+        const formData = new FormData();
+        const adding_category = category === "add_category" ? addingCategory : category;
+        formData.append("category", adding_category);
+        formData.append("item_name", item_name);
+        formData.append("description", description);
+        formData.append("item_price", item_price);
+        formData.append("discount_percentage", discount_percentage);
+        formData.append("stock_quantity", stock_quantity);
+        formData.append("main_image", file);
+        formData.append("multiple_image", files);
+        formData.append("size_chart", sizeChart);
     }
     return(
         <>
@@ -54,28 +74,28 @@ export default function Add_Product({openAddProducts, setOpenAddProducts}){
                     {isAddingCategory && 
                         <div className="flex flex-col pb-5">
                             <label htmlFor="item_name">Indicate Category: *</label>
-                            <input type="text" id="item_name" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex. Hoodie" required/>
+                            <input type="text" id="item_name" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex. Hoodie" value={addingCategory} onChange={(e) => setAddingCategory(e.target.value)} required/>
                         </div>
                     }
                     <div className="flex flex-col pb-5">
                         <label htmlFor="item_name">Item Name: *</label>
-                        <input type="text" id="item_name" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex. God's plan shirt" required/>
+                        <input type="text" id="item_name" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex. God's plan shirt" value={item_name} onChange={(e) => setItem_name(e.target.value)} required/>
                     </div>
                     <div className="flex flex-col pb-5">
                         <label htmlFor="description">Description: *</label>
-                        <textarea  id="description" className="border border-gray-500 h-10 rounded-md outline-blue-500 p-3 text-sm" placeholder="Your Item Description" required/>
+                        <textarea  id="description" className="border border-gray-500 h-10 rounded-md outline-blue-500 p-3 text-sm" placeholder="Your Item Description" value={description} onChange={(e) => setDescription(e.target.value)} required/>
                     </div>
                     <div className="flex flex-col pb-5">
                         <label htmlFor="item_price">Item Price: *</label>
-                        <input type="number" id="item_price" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex.250" required/>
+                        <input type="number" id="item_price" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex.250" value={item_price} onChange={(e) => setItem_price(e.target.value)} required/>
                     </div>
                     <div className="flex flex-col pb-5">
-                        <label htmlFor="discount_price">Discount Price: (Optional)</label>
-                        <input type="number" id="discount_price" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex.20" required/>
+                        <label htmlFor="discount_percentage">Discount Percentage: (Optional)</label>
+                        <input type="number" id="discount_percentage" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex.20" value={discount_percentage} onChange={(e) => setdiscount_percentage(e.target.value)} />
                     </div>
                     <div className="flex flex-col pb-5">
                         <label htmlFor="stock_quantity">Stock Quantity: *</label>
-                        <input type="number" id="stock_quantity" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex.10" required/>
+                        <input type="number" id="stock_quantity" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex.10" value={stock_quantity} onChange={(e) => setStock_quantity(e.target.value)} required/>
                     </div>
                     <div className="flex flex-col pb-5">
                         <label htmlFor="main_image">Main Image: *</label>

@@ -31,7 +31,6 @@ export default function Products(){
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="light">Active<p className='bg-yellow-500 rounded-full w-3 h-3'></p></SelectItem>
-                                    <SelectItem value="dark">Inactive<p className='bg-gray-500 rounded-full w-3 h-3'></p></SelectItem>
                                     <SelectItem value="system">Out of Stock<p className='bg-red-500 rounded-full w-3 h-3'></p></SelectItem>
                                 </SelectContent>
                             </Select>

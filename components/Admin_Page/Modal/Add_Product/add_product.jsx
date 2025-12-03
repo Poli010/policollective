@@ -10,13 +10,17 @@ import { useEffect, useState } from "react";
 import Upload_Image from "../Upload_Image/upload_image";
 import Multiple_Image from "../Multiple_Image/multiple_image";
 import SizeChart_Upload from "../SizeChart_Upload/sizeChart_upload";
-import { description } from "../../Chart/Area_Chart";
+import axios from "axios";
 
 export default function Add_Product({openAddProducts, setOpenAddProducts}){
     //CONTROL STATES
     const [isAddingCategory, setIsAddingCategory] = useState(false);
+    const [mainProgress, setmainProgress] = useState(0);
+    const [multipleImage_Progress, setmultipleImage_Progress] = useState(0);
+    const [sizeChartProgress, setsizeChartProgress] = useState(0);
 
     //DATA STATES
+    const [categoryData, setCategoryData] = useState([]);
     const [category, setCategory] = useState("");
     const [addingCategory, setAddingCategory] = useState("");
     const [item_name, setItem_name] = useState("");    
@@ -30,6 +34,28 @@ export default function Add_Product({openAddProducts, setOpenAddProducts}){
 
    
     useEffect(() => {
+        const fetchData = async () => {
+            try{
+                const response = await axios.get('/api/admin_page/products/fetch_products');
+                if(response.status === 200){
+                    setCategoryData(response.data.result);
+                }
+            }catch(err){
+                if(err.response){
+                    switch(err.response.status){
+                        case 404:
+                            console.log(err.response.data.message);
+                            break;
+                        case 500:
+                            console.log(err.response.data.message);
+                            break;
+                        default:
+                            console.log("Unexpected error", err.response.status);
+                    }
+                }
+            }
+        }
+        fetchData();
         if(category === "add_category"){
             setIsAddingCategory(true);
         }
@@ -38,22 +64,54 @@ export default function Add_Product({openAddProducts, setOpenAddProducts}){
         }
     }, [category])
 
-    const addProduct = (e) => {
+
+    const addProduct = async (e) => {
         e.preventDefault();
-        const formData = new FormData();
-        const adding_category = category === "add_category" ? addingCategory : category;
-        formData.append("category", adding_category);
-        formData.append("item_name", item_name);
-        formData.append("description", description);
-        formData.append("item_price", item_price);
-        formData.append("discount_percentage", discount_percentage);
-        formData.append("stock_quantity", stock_quantity);
-        formData.append("main_image", file);
-        formData.append("multiple_image", files);
-        formData.append("size_chart", sizeChart);
+        try{
+            const formData = new FormData();
+            const adding_category = category === "add_category" ? addingCategory : category;
+            formData.append("category", adding_category);
+            formData.append("item_name", item_name);
+            formData.append("description", description);
+            formData.append("item_price", item_price);
+            formData.append("discount_percentage", discount_percentage);
+            formData.append("stock_quantity", stock_quantity);
+            formData.append("main_image", file);
+            //Multiple Image
+            if (files && files.length > 0) {
+                for (let i = 0; i < files.length; i++) {
+                    formData.append("multiple_image", files[i]); 
+                }
+            }
+            formData.append("size_chart", sizeChart);
+            const response = await axios.post('/api/admin_page/products/add_products',formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                },
+                onUploadProgress: (progressEvent) => {
+                    const {loaded, total} = progressEvent;
+                    const percent = Math.round((loaded * 100) / total);
+                    setmainProgress(percent);
+                    setmultipleImage_Progress(percent);
+                    setsizeChartProgress(percent);
+                }
+            });
+            if(response.status === 201){
+                alert("Success Added!")
+            }
+        }catch(err){
+            if(err.response){
+                console.log(err.response.data.message);
+                setmainProgress(0);
+                setmultipleImage_Progress(0);
+                setsizeChartProgress(0);
+            }
+        }
+        
     }
     return(
         <>
+            
             <div className={`fixed top-1/2 left-1/2 transform -translate-1/2 bg-white w-[500px] shadow-2xl rounded-md py-5 dark:bg-gray-900 transition duration-500 ${openAddProducts ? 'scale-100' : 'scale-0'}`}>
                 <h1 className="font-bold text-center text-2xl">Add Products</h1>
                 <form className="mt-3 h-[500px] overflow-y-scroll px-5" onSubmit={addProduct}>
@@ -64,9 +122,11 @@ export default function Add_Product({openAddProducts, setOpenAddProducts}){
                                 <SelectValue placeholder="Select Category" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="light">Hoodie</SelectItem>
-                                <SelectItem value="dark">T-Shirt</SelectItem>
-                                <SelectItem value="system">Shoes</SelectItem>
+                                {Array.from(new Set(categoryData.map(c => c.category))).map((uniqueCategory, index) => (
+                                    <SelectItem key={uniqueCategory} value={uniqueCategory}>
+                                    {uniqueCategory}
+                                    </SelectItem>
+                                ))}
                                 <SelectItem value="add_category"><Plus/> Add Category</SelectItem>
                             </SelectContent>
                         </Select>
@@ -99,15 +159,15 @@ export default function Add_Product({openAddProducts, setOpenAddProducts}){
                     </div>
                     <div className="flex flex-col pb-5">
                         <label htmlFor="main_image">Main Image: *</label>
-                        <Upload_Image file={file} setFile={setFile}/>
+                        <Upload_Image file={file} setFile={setFile} mainProgress={mainProgress}/>
                     </div>    
                     <div className="flex flex-col pb-5">
                         <label htmlFor="main_image">Upload Multiple Image: *</label>
-                        <Multiple_Image files={files} setFiles={setFiles}/>
+                        <Multiple_Image files={files} setFiles={setFiles} multipleImage_Progress={multipleImage_Progress}/>
                     </div>  
                     <div className="flex flex-col pb-5">
                         <label htmlFor="main_image">Upload Size Chart: *</label>
-                        <SizeChart_Upload sizeChart={sizeChart} setSizeChart={setSizeChart}/>
+                        <SizeChart_Upload sizeChart={sizeChart} setSizeChart={setSizeChart} sizeChartProgress={sizeChartProgress}/>
                     </div>
                     <div>
                         <button className="flex items-center justify-center bg-black text-white w-full p-2 rounded-md cursor-pointer hover:bg-gray-700"><CloudUpload/>Upload Product</button>  

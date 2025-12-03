@@ -3,7 +3,7 @@ import { CloudUpload, X, CircleAlert } from "lucide-react";
 import { format_fileSize } from "@/lib/formatFileSize/format_fileSize";
 import { Progress } from "@/components/ui/progress";
 
-export default function Upload_Image({file, setFile}) {
+export default function Upload_Image({file, setFile, mainProgress}) {
 
     const [isNotSupported, setIsnotSupported] = useState(false);
     const inputRef = useRef();
@@ -67,15 +67,15 @@ export default function Upload_Image({file, setFile}) {
             
             {file &&
                 <div className="border border-gray-500 py-3 rounded-md px-2 mt-2">
-                    <div className="relative flex items-center">
-                        <img src={URL.createObjectURL(file)} alt="" className="w-15 h-20" />
+                    <div className="relative flex items-center mb-3">
+                        <img src={URL.createObjectURL(file)} alt={file.name} className="w-15 h-20" />
                         <div className="ml-3 w-80">
                             <p className="font-semibold text-sm mb-1 mt-1">{file.name}</p>
                             <p className="text-gray-500 text-sm">{format_fileSize(file.size)}</p>
                         </div>
                         <X className="absolute right-2 top-1 cursor-pointer" onClick={() => setFile(null)}/>
                     </div>
-                    <Progress value={30}/>
+                    <Progress value={mainProgress}/>
                 </div>
             }
             

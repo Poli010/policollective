@@ -7,7 +7,7 @@ export async function GET() {
             return Response.json({result: rows}, {status: 200});
         }
         else{
-             return Response.json({message: "No Products"}, {status: 404});
+            return Response.json({message: "No Products"}, {status: 404});
         }
 
     } catch(err){

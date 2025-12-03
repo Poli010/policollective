@@ -2,7 +2,7 @@ import { connectToDatabase } from "@/lib/database_connection/db";
 import { generate_productID } from "@/lib/generate_uniqueID/generate_productID";
 import path from "path";
 import { writeFile } from "fs/promises";
-import fs, { stat } from "fs";
+import fs from "fs";
 
 //NEED FOR UPLOADING IMAGE
 export const runtime = "nodejs";

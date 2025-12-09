@@ -1,7 +1,7 @@
 'use client'
 import Admin_Header from "@/components/Admin_Page/Admin_Header/Admin_Header";
 import Admin_SideBar from "@/components/Admin_Page/Admin_SideBar/Admin_SideBar";
-import Products_Data from "@/components/Products/Products_Item/products_item";
+import Products_Data from "@/components/Admin_Page/Products/Products_Item/products_item";
 import { useState } from "react";
 import { Plus, Search } from "lucide-react";
 import {
@@ -50,7 +50,6 @@ export default function Products(){
                             </div>
                             
                         </div>
-
                         <div className="h-[70vh] md:overflow-y-scroll md:overflow-x-hidden p-5">
                             <Products_Data/>
                         </div>

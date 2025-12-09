@@ -22,7 +22,8 @@ export async function POST(req) {
         const item_price = parseFloat(formData.get("item_price"));
         const discount_percentage = parseFloat(formData.get("discount_percentage")) || 0;
         const discount_price = parseFloat((item_price * (1 - discount_percentage / 100)).toFixed(2));
-        const stock_quantity = await formData.get("stock_quantity");
+        const variantsJSON = await formData.get("variants");
+        const variants = JSON.parse(variantsJSON);
         const main_image = await formData.get("main_image");
         const multiple_image = await formData.getAll("multiple_image");
         const size_chart = await formData.get("size_chart");
@@ -76,16 +77,26 @@ export async function POST(req) {
             const sizeChartDBPath = `products/${item_name}/size_chart/${sizeChartName}`;
             const multipleImagesDBPaths = multipleImage_Name.map(name => `products/${item_name}/Additional_Image/${name}`);
 
-            const [rows] = await db.execute("INSERT INTO products (product_id, category, item_name, description, item_price, discount_pct, discount_price, stock_quantity, image_url, additional_image, size_chart) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            [product_id, category, item_name, description, item_price, discount_percentage, discount_price, stock_quantity, mainImageDBPath, JSON.stringify(multipleImagesDBPaths), sizeChartDBPath]);
+            for(const v of variants){
+                await db.execute("INSERT INTO products_variant (product_id, size, color, stock_quantity) VALUES (?, ?, ?, ?)", [product_id, v.size, v.color, v.stock]);
+            }
+            const[rows1] = await db.execute("SELECT SUM(stock_quantity) AS total_stock FROM products_variant WHERE product_id = ?",[product_id]);
+            if(rows1.length > 0){
+                const total_quantity = rows1[0].total_stock;
+                const [rows2] = await db.execute("INSERT INTO products (product_id, category, item_name, description, item_price, discount_pct, discount_price, total_quantity, image_url, additional_image, size_chart) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                [product_id, category, item_name, description, item_price, discount_percentage, discount_price, total_quantity, mainImageDBPath, JSON.stringify(multipleImagesDBPaths), sizeChartDBPath]);
+                if(rows2.affectedRows > 0){
+                    return Response.json({message: "Products sucessfully created"}, {status: 201});
+                }
         
-            if(rows.affectedRows > 0){
-                return Response.json({message: "Products sucessfully created"}, {status: 201});
+            }
+            else{
+                return Response.json({message: "Products Insertion Failed"}, {status: 400});
             }
         }
         
     }catch(err){
-        return Response.json({err: err.message}, {status: 500});
+        return Response.json({message: err.message}, {status: 500});
     }
 
 }

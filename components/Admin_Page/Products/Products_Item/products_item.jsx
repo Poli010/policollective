@@ -19,11 +19,15 @@ export default function Products_Item() {
    
 
     //EDIT MODAL STATES AND DATA
+    const [variantsEdit, setVariantsEdit] = useState([
+        { size: "", color: "", stock_quantity: "" }
+    ]);
     const [product_idEDIT, setProductIdEDIT] = useState("");
     const [item_nameEDIT, setItem_nameEDIT] = useState("");
     const [item_priceEDIT, setItem_PriceEDIT] = useState("");
     const [descriptionEDIT, setDescriptionEDIT] = useState("");
     const [discount_pct, setDiscount_pct] = useState("");
+    const [isSubmit, setIsSubmit] = useState(false);
     useEffect(() => {
         const fetchData = async () => {
             try{
@@ -70,50 +74,77 @@ export default function Products_Item() {
         }
     }
 
-    const handleEditProduct = (product_id, item_name, description, item_price, discount_pct) => {
+    const ViewEditProduct = async (product_id, item_name, description, item_price, discount_pct) => {
         setIsEditProduct(true);
         setProductIdEDIT(product_id);
         setItem_nameEDIT(item_name);
         setDescriptionEDIT(description);
         setItem_PriceEDIT(item_price);
         setDiscount_pct(discount_pct);
+        try{
+            const response = await axios.get('/api/admin_page/products/fetch_variants', {
+                params: {product_id}
+            });
+            if(response.status === 200){
+                setVariantsEdit(response.data.result);
+            }
+        }catch(err){
+            console.error(err);
+        }
     }
     
-    const handleEditProductSubmit = async () => {
+    const handleEditProductSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmit(true);
         try{
             const response = await axios.post('/api/admin_page/products/edit_products',{
                 product_id: product_idEDIT,
                 item_name: item_nameEDIT,
                 description: descriptionEDIT,
                 item_price: item_priceEDIT,
-                discount_pct: discount_pct
+                discount_pct: discount_pct,
+                variants: variantsEdit
             });
             if(response.status === 200){
-                alert("Sucess");
+                window.location.reload();
             }
         }catch(err){
             if(err.response){
                 switch(err.response.status){
                     case 404:
                         console.log(err.response.message);
+                        setIsSubmit(false);
                         break;
                     case 400:
                         console.log(err.response.message);
+                        setIsSubmit(false);
+                        break;
+                    case 500:
+                        console.log(err.response.data.message);
+                        setIsSubmit(false);
                         break;
                     default:
                         console.log("Unexpected error", err.response.status);
+                        setIsSubmit(false);
                 }
             }
         }
     }
 
+
+    const handleVariantValue = (index, field, value) => {
+        const newVariants = [...variantsEdit];
+        newVariants[index][field] = value;
+        setVariantsEdit(newVariants);
+    }
+
     return (
         <>
-            <div className={`grid gap-5 place-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ${isViewProduct || isEditProduct ? ' overflow-hidden' : 'overflow-auto'}`}>
+            <div className={`grid gap-5 place-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  ${isViewProduct || isEditProduct ? ' overflow-hidden' : 'overflow-auto'}`}>
                 {products.length > 0 ? (
                     products.map((product, index) => (
                         <div className="" key={index}>
-                            <div className="w-86 md:w-60 bg-white dark:bg-gray-900 rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-gray-200 dark:border-gray-700">
+                            <div className="w-86 md:w-60  bg-white dark:bg-gray-900 rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-gray-200 dark:border-gray-700">
                                 <div className='flex items-center justify-center'>
                                     <div className="relative w-60 h-[250px] rounded-t-xl overflow-hidden group">
         
@@ -139,7 +170,7 @@ export default function Products_Item() {
                                     </div>
                                 
                                     <div className="flex justify-between mt-2">
-                                        <div>
+                                        <div className=' h-15'>
                                             <p className="text-sm text-gray-500">Price:</p>
                                             {product.discount_pct > 0 ? (<p className="text-sm text-gray-500 flex items-center justify-end mr-1 line-through">{product.item_price}</p>) : ('')}
                                             {product.discount_pct > 0 ? (<p className="flex items-center font-semibold"><PhilippinePeso size={18} className="mr-1" /> {product.discount_price}</p>) : (<p className="flex items-center font-semibold"><PhilippinePeso size={18} className="mr-1" /> {product.item_price}</p>)}
@@ -153,7 +184,7 @@ export default function Products_Item() {
                                 </div>
                                 {/* ACTION BUTTONS */}
                                 <div className="flex justify-between px-10 md:px-4 pb-4">
-                                    <button className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md text-sm cursor-pointer" onClick={() => handleEditProduct(product.product_id, product.item_name, product.description, product.item_price, product.discount_pct)}>
+                                    <button className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white px-5 py-1.5 rounded-md text-sm cursor-pointer" onClick={() => ViewEditProduct(product.product_id, product.item_name, product.description, product.item_price, product.discount_pct)}>
                                         <Pencil size={16} /> Edit
                                     </button>
                                     <button className="flex items-center gap-1 bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md text-sm cursor-pointer">
@@ -195,6 +226,9 @@ export default function Products_Item() {
                 discount_pct={discount_pct}
                 setDiscount_pct={setDiscount_pct}
                 handleEditProductSubmit={handleEditProductSubmit}
+                variants={variantsEdit}
+                isSubmit={isSubmit}
+                handleVariantValue={handleVariantValue}
                 closeModal={() => setIsEditProduct(false)}/>
         </>
     );

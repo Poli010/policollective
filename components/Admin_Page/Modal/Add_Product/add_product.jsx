@@ -27,7 +27,7 @@ export default function Add_Product({openAddProducts, setOpenAddProducts, clodeA
 
     //DATA STATES
     const [categoryData, setCategoryData] = useState([]);
-     const [variants, setVariants] = useState([
+    const [variants, setVariants] = useState([
         { size: "", color: "", stock: "" }
     ]);
     const [category, setCategory] = useState("");
@@ -215,7 +215,7 @@ export default function Add_Product({openAddProducts, setOpenAddProducts, clodeA
                                 </div>
                                 <div className="flex flex-col pt-2 col-span-2">
                                     <label htmlFor="item_name">Quantity: *</label>
-                                    <input type="number" id="item_name" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex. 10" value={variant.stock} onChange={(e) => handleVariantValue(index, "stock", e.target.value)} autoComplete="off" required/>
+                                    <input inputMode="numeric" id="item_name" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex. 10" value={variant.stock} onChange={(e) => {const onlyNumber = e.target.value.replace(/\D/g, ''); handleVariantValue(index, "stock", onlyNumber)}} autoComplete="off" required/>
                                 </div>
                                 <button type="button" className="flex items-center bg-red-500 py-2 px-2 w-42 text-white rounded-md mt-2 text-sm hover:bg-red-900 cursor-pointer" onClick={() => removeVariant(index)}><Trash size={18}/> Remove Variant</button>
                             </div>
@@ -230,11 +230,11 @@ export default function Add_Product({openAddProducts, setOpenAddProducts, clodeA
                     </div>
                     <div className="flex flex-col pb-5">
                         <label htmlFor="item_price">Item Price: *</label>
-                        <input type="number" id="item_price" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex.250" value={item_price} onChange={(e) => setItem_price(e.target.value)} required/>
+                        <input inputMode="numeric" id="item_price" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex.250" value={item_price} onChange={(e) => {const onlyNumber = e.target.value.replace(/\D/g, ''); setItem_price(onlyNumber)}} required/>
                     </div>
                     <div className="flex flex-col pb-5">
                         <label htmlFor="discount_percentage">Discount Percentage % (Optional):</label>
-                        <input type="number" id="discount_percentage" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex.20" value={discount_percentage} onChange={(e) => setdiscount_percentage(e.target.value)} />
+                        <input inputMode="numeric" id="discount_percentage" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex.20" value={discount_percentage} onChange={(e) => {const onlyNumber = e.target.value.replace(/\D/g, ''); setdiscount_percentage(onlyNumber)}} />
                     </div>
 
                     <div className="flex flex-col pb-5">

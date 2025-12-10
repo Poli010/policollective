@@ -72,9 +72,9 @@ export async function POST(req) {
             }
 
             //RELATIVE PATH
-            const mainImageDBPath = `products/${item_name}/Main_Image/${imageName}`;
-            const sizeChartDBPath = `products/${item_name}/size_chart/${sizeChartName}`;
-            const multipleImagesDBPaths = multipleImage_Name.map(name => `products/${item_name}/Additional_Image/${name}`);
+            const mainImageDBPath = `products/${product_id}/Main_Image/${imageName}`;
+            const sizeChartDBPath = `products/${product_id}/size_chart/${sizeChartName}`;
+            const multipleImagesDBPaths = multipleImage_Name.map(name => `products/${product_id}/Additional_Image/${name}`);
 
             for(const v of variants){
                 await db.execute("INSERT INTO products_variant (product_id, size, color, stock_quantity) VALUES (?, ?, ?, ?)", [product_id, v.size, v.color, v.stock]);

@@ -69,7 +69,7 @@ export default function Upload_Image({file, setFile, mainProgress}) {
                 <div className="border border-gray-500 py-3 rounded-md px-2 mt-2">
                     <div className="relative flex items-center mb-3">
                         <img src={URL.createObjectURL(file)} alt={file.name} className="w-15 h-20" />
-                        <div className="ml-3 w-[60%] sm:w-[70%] md:w-[75%] lg:w-80 border">
+                        <div className="ml-3 w-[60%] sm:w-[70%] md:w-[75%] lg:w-80">
                             <p className="font-semibold text-sm mb-1 mt-1 break-all">{file.name}</p>
                             <p className="text-gray-500 text-sm">{format_fileSize(file.size)}</p>
                         </div>

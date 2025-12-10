@@ -56,10 +56,11 @@ export default function View_Product({isViewProduct, closeModal,
                             </div>
                             <div className="mt-3">
                                 <label htmlFor="size" className="font-semibold">Available Color: </label>
-                                {[...new Set (variants.map(v => v.color))].map((color, index) => (
-                                    <p key={index} className="pr-1">{color},</p>
-                                ))}
-                                   
+                                <div className="flex">
+                                    {[...new Set (variants.map(v => v.color))].map((color, index) => (
+                                        <p key={index} className="pr-1">{color},</p>
+                                    ))}
+                                </div>
                            
                                
                             </div>

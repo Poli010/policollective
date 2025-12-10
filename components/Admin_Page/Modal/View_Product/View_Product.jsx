@@ -24,7 +24,7 @@ export default function View_Product({isViewProduct, closeModal,
         <>
             <div className={`fixed top-0 bg-black w-full z-20 left-0 h-screen opacity-80 ${isViewProduct ? 'scale-100' : 'scale-0'}`} onClick={closeModal}></div>
             <div className={`fixed z-20 top-1/2 left-1/2 transform -translate-1/2 bg-white dark:bg-gray-900 w-[95%] h-[600px] lg:w-[1000px] rounded-md shadow-2xl transition duration-500 ${isViewProduct ? 'scale-100' : 'scale-0'}`}>
-                <X className="fixed top-3 right-3" onClick={closeModal}/>
+                <X className="fixed top-3 right-3 cursor-pointer" onClick={closeModal}/>
                 <div className="p-5 overflow-y-scroll h-[600px]">
                     <div className="grid grid-cols-1 lg:grid-cols-2">
                         <div className=" mt-3">

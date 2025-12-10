@@ -36,10 +36,10 @@ export async function POST(req) {
         else{
             //CREATE FOLDER FOR IMAGES
 
-            //BASE UPLOAD PATH
-            const basePath = path.join(process.cwd(), "public", "uploads", "products", item_name);
+            //ROOT PATH
+            const basePath = path.join(process.cwd(), "public", "uploads", "products", product_id);
             
-            //MAIN IMAGE FOLDER
+            //ADD FOLDER IN ROOT PATH
             const mainImage_folder = path.join(basePath, "Main_Image");
             const multipleImage_folder = path.join(basePath, "Additional_Image");
             const sizeChart_Folder = path.join(basePath, "size_chart");
@@ -56,7 +56,6 @@ export async function POST(req) {
             //FULL FILE PATH
             const mainImagePath = path.join(mainImage_folder, imageName);
             const sizeChartPath = path.join(sizeChart_Folder, sizeChartName);
-
 
             //Save Image
             const buffer = Buffer.from(await main_image.arrayBuffer());

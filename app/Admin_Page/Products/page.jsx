@@ -58,7 +58,7 @@ export default function Products(){
                 </div>
             </div>
 
-            <Add_Product openAddProducts={openAddProducts} setOpenAddProducts={setOpenAddProducts}/>
+            <Add_Product openAddProducts={openAddProducts} setOpenAddProducts={setOpenAddProducts} clodeAddProductModal={() => setOpenAddProducts(false)}/>
         </>
     );
 }

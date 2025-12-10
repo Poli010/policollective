@@ -3,10 +3,12 @@ import { PhilippinePeso, Pencil, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import View_Product from '../../Modal/View_Product/View_Product';
+import Edit_Product from '../../Modal/Edit_Product/Edit_Product';
 
 export default function Products_Item() {
     const [products, setProducts] = useState([]);
     const [isViewProduct, setIsViewProduct] = useState(false);
+    const [isEditProduct, setIsEditProduct] = useState(false);
     const [name, setName] = useState("");
     const [multipleImage, setMultipleImage] = useState([]);
     const [variants, setVariants] = useState([]);
@@ -14,6 +16,14 @@ export default function Products_Item() {
     const [size_chart, setSize_chart] = useState("");
     const [total_stock, setTotalStock] = useState("");
     const [description, setDescription] = useState("");
+   
+
+    //EDIT MODAL STATES AND DATA
+    const [product_idEDIT, setProductIdEDIT] = useState("");
+    const [item_nameEDIT, setItem_nameEDIT] = useState("");
+    const [item_priceEDIT, setItem_PriceEDIT] = useState("");
+    const [descriptionEDIT, setDescriptionEDIT] = useState("");
+    const [discount_pct, setDiscount_pct] = useState("");
     useEffect(() => {
         const fetchData = async () => {
             try{
@@ -59,9 +69,47 @@ export default function Products_Item() {
             console.error(err);
         }
     }
+
+    const handleEditProduct = (product_id, item_name, description, item_price, discount_pct) => {
+        setIsEditProduct(true);
+        setProductIdEDIT(product_id);
+        setItem_nameEDIT(item_name);
+        setDescriptionEDIT(description);
+        setItem_PriceEDIT(item_price);
+        setDiscount_pct(discount_pct);
+    }
+    
+    const handleEditProductSubmit = async () => {
+        try{
+            const response = await axios.post('/api/admin_page/products/edit_products',{
+                product_id: product_idEDIT,
+                item_name: item_nameEDIT,
+                description: descriptionEDIT,
+                item_price: item_priceEDIT,
+                discount_pct: discount_pct
+            });
+            if(response.status === 200){
+                alert("Sucess");
+            }
+        }catch(err){
+            if(err.response){
+                switch(err.response.status){
+                    case 404:
+                        console.log(err.response.message);
+                        break;
+                    case 400:
+                        console.log(err.response.message);
+                        break;
+                    default:
+                        console.log("Unexpected error", err.response.status);
+                }
+            }
+        }
+    }
+
     return (
         <>
-            <div className={`grid gap-5 place-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ${isViewProduct ? 'h-screen overflow-hidden' : ''}`}>
+            <div className={`grid gap-5 place-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ${isViewProduct || isEditProduct ? ' overflow-hidden' : 'overflow-auto'}`}>
                 {products.length > 0 ? (
                     products.map((product, index) => (
                         <div className="" key={index}>
@@ -105,7 +153,7 @@ export default function Products_Item() {
                                 </div>
                                 {/* ACTION BUTTONS */}
                                 <div className="flex justify-between px-10 md:px-4 pb-4">
-                                    <button className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md text-sm cursor-pointer">
+                                    <button className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md text-sm cursor-pointer" onClick={() => handleEditProduct(product.product_id, product.item_name, product.description, product.item_price, product.discount_pct)}>
                                         <Pencil size={16} /> Edit
                                     </button>
                                     <button className="flex items-center gap-1 bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md text-sm cursor-pointer">
@@ -126,14 +174,28 @@ export default function Products_Item() {
                 }
             </div>
             <View_Product isViewProduct={isViewProduct}
-            product_name={name}
-            multipleImage={multipleImage}
-            item_price={item_price}
-            size_chart={size_chart}
-            total_stock={total_stock}
-            description={description}
-            variants={variants}
-            closeModal={() => setIsViewProduct(false)}/>
+                product_name={name}
+                multipleImage={multipleImage}
+                item_price={item_price}
+                size_chart={size_chart}
+                total_stock={total_stock}
+                description={description}
+                variants={variants}
+                closeModal={() => setIsViewProduct(false)}
+            />
+
+            <Edit_Product 
+                isEdit_ProductOpen={isEditProduct} 
+                item_name={item_nameEDIT}
+                setItem_name={setItem_nameEDIT}
+                description={descriptionEDIT}
+                setDescription={setDescriptionEDIT}
+                item_price={item_priceEDIT}
+                setItem_price={setItem_PriceEDIT}
+                discount_pct={discount_pct}
+                setDiscount_pct={setDiscount_pct}
+                handleEditProductSubmit={handleEditProductSubmit}
+                closeModal={() => setIsEditProduct(false)}/>
         </>
     );
 }

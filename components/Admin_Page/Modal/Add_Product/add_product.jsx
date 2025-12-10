@@ -12,7 +12,7 @@ import Multiple_Image from "./Multiple_Image/multiple_image";
 import SizeChart_Upload from "./SizeChart_Upload/sizeChart_upload";
 import axios from "axios";
 
-export default function Add_Product({openAddProducts, setOpenAddProducts}){
+export default function Add_Product({openAddProducts, setOpenAddProducts, clodeAddProductModal}){
     //CONTROL STATES
     const [isAddingCategory, setIsAddingCategory] = useState(false);
     const [isSubmit, setIsSubmit] = useState(false);
@@ -172,7 +172,8 @@ export default function Add_Product({openAddProducts, setOpenAddProducts}){
     }
     return(
         <>
-            <div className={`fixed top-1/2 left-1/2 transform -translate-1/2 bg-white w-[95%] sm:w-[80%] md:w-[500px] shadow-2xl rounded-md py-5 dark:bg-gray-900 transition duration-500 ${openAddProducts ? 'scale-100' : 'scale-0'}`}>
+            <div className={`fixed top-0 bg-black w-full h-screen z-20 opacity-70 ${openAddProducts ? 'scale-100' : 'scale-0'}`} onClick={clodeAddProductModal}></div>
+            <div className={`fixed top-1/2 left-1/2 z-30 transform -translate-1/2 bg-white w-[95%] sm:w-[80%] md:w-[500px] shadow-2xl rounded-md py-5 dark:bg-gray-900 transition duration-500 ${openAddProducts ? 'scale-100' : 'scale-0'}`}>
                 <h1 className="font-bold text-center text-2xl">Add Products</h1>
                 <form className="mt-3 h-[500px] overflow-y-scroll px-5" onSubmit={addProduct}>
                     <div className="pb-5">
@@ -225,14 +226,14 @@ export default function Add_Product({openAddProducts, setOpenAddProducts}){
                     </div>
                     <div className="flex flex-col pb-5">
                         <label htmlFor="description">Description: *</label>
-                        <textarea  id="description" className="border border-gray-500 h-10 rounded-md outline-blue-500 p-3 text-sm" placeholder="Your Item Description" value={description} onChange={(e) => setDescription(e.target.value)} required/>
+                        <textarea  id="description" className="border border-gray-500 rounded-md outline-blue-500 p-3 text-sm" placeholder="Your Item Description" value={description} onChange={(e) => setDescription(e.target.value)} required/>
                     </div>
                     <div className="flex flex-col pb-5">
                         <label htmlFor="item_price">Item Price: *</label>
                         <input type="number" id="item_price" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex.250" value={item_price} onChange={(e) => setItem_price(e.target.value)} required/>
                     </div>
                     <div className="flex flex-col pb-5">
-                        <label htmlFor="discount_percentage">Discount Percentage: (Optional)</label>
+                        <label htmlFor="discount_percentage">Discount Percentage % (Optional):</label>
                         <input type="number" id="discount_percentage" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex.20" value={discount_percentage} onChange={(e) => setdiscount_percentage(e.target.value)} />
                     </div>
 

@@ -194,7 +194,7 @@ export default function Add_Product({openAddProducts, setOpenAddProducts, clodeA
                     {isAddingCategory && 
                         <div className="flex flex-col pb-5">
                             <label htmlFor="item_name">Indicate Category: *</label>
-                            <input type="text" id="item_name" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex. Hoodie" value={addingCategory} onChange={(e) => setAddingCategory(e.target.value)} required/>
+                            <input type="text" id="item_name" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex. Hoodie" autoComplete="off" value={addingCategory} onChange={(e) => setAddingCategory(e.target.value)} required/>
                         </div>
                     }
                     <div className="flex flex-col pb-5">
@@ -230,11 +230,11 @@ export default function Add_Product({openAddProducts, setOpenAddProducts, clodeA
                     </div>
                     <div className="flex flex-col pb-5">
                         <label htmlFor="item_price">Item Price: *</label>
-                        <input inputMode="numeric" id="item_price" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex.250" value={item_price} onChange={(e) => {const onlyNumber = e.target.value.replace(/\D/g, ''); setItem_price(onlyNumber)}} required/>
+                        <input inputMode="numeric" id="item_price" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex.250" autoComplete="off" value={item_price} onChange={(e) => {const onlyNumber = e.target.value.replace(/\D/g, ''); setItem_price(onlyNumber)}} required/>
                     </div>
                     <div className="flex flex-col pb-5">
                         <label htmlFor="discount_percentage">Discount Percentage % (Optional):</label>
-                        <input inputMode="numeric" id="discount_percentage" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex.20" value={discount_percentage} onChange={(e) => {const onlyNumber = e.target.value.replace(/\D/g, ''); setdiscount_percentage(onlyNumber)}} />
+                        <input inputMode="numeric" id="discount_percentage" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex.20" autoComplete="off" value={discount_percentage} onChange={(e) => {const onlyNumber = e.target.value.replace(/\D/g, ''); setdiscount_percentage(onlyNumber)}} />
                     </div>
 
                     <div className="flex flex-col pb-5">

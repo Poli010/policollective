@@ -19,10 +19,10 @@ export default function Edit_Product({
     return(
         <>
             <div className={`fixed top-0 bg-black w-full z-20 left-0 h-screen opacity-80 ${isEdit_ProductOpen ? 'scale-100' : 'scale-0'}`} onClick={closeModal}></div>
-            <div className={`fixed top-1/2 left-1/2 transform -translate-1/2 bg-white min-h-[400px] w-[500px] rounded-md shadow-2xl transition duration-500 z-30 ${isEdit_ProductOpen ? 'scale-100' : 'scale-0'}`}>
+            <div className={`fixed top-1/2 left-1/2 transform -translate-1/2 bg-white dark:bg-gray-900 min-h-[400px] w-[90%] lg:w-[500px] rounded-md shadow-2xl transition duration-500 z-30 ${isEdit_ProductOpen ? 'scale-100' : 'scale-0'}`}>
                 <h1 className="text-2xl text-center font-semibold mt-2">Edit Product</h1>
                 <X className="fixed top-3 right-3 cursor-pointer" onClick={closeModal}/>
-                <form className="px-10 max-h-[650px] overflow-y-scroll" onSubmit={handleEditProductSubmit}>
+                <form className="px-3 lg:px-10 h-[85vh] lg:max-h-[650px] overflow-y-scroll" onSubmit={handleEditProductSubmit}>
                     <div className="flex flex-col pt-5">
                         <label htmlFor="item_name">Item Name:</label>
                         <input type="text" id="item_name" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex. Nissan Shirt Black" value={item_name} onChange={(e) => setItem_name(e.target.value)} required/>

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import View_Product from '../../Modal/View_Product/View_Product';
 import Edit_Product from '../../Modal/Edit_Product/Edit_Product';
+import DeleteModal from '../../Modal/Delete_Product/Delete_Product';
 
 export default function Products_Item() {
     const [products, setProducts] = useState([]);
@@ -28,6 +29,10 @@ export default function Products_Item() {
     const [descriptionEDIT, setDescriptionEDIT] = useState("");
     const [discount_pct, setDiscount_pct] = useState("");
     const [isSubmit, setIsSubmit] = useState(false);
+
+    //DELETE MODAL STATES AND DATA
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
+    const [product_id, setProductID] = useState(false);
     useEffect(() => {
         const fetchData = async () => {
             try{
@@ -138,6 +143,11 @@ export default function Products_Item() {
         setVariantsEdit(newVariants);
     }
 
+
+    const Delete_Product = (product_id) => {
+        setProductID(product_id);
+        setOpenDeleteModal(true);
+    }
     return (
         <>
             <div className={`grid gap-5 place-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  ${isViewProduct || isEditProduct ? ' overflow-hidden' : 'overflow-auto'}`}>
@@ -147,7 +157,6 @@ export default function Products_Item() {
                             <div className="w-86 md:w-60  bg-white dark:bg-gray-900 rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-gray-200 dark:border-gray-700">
                                 <div className='flex items-center justify-center'>
                                     <div className="relative w-60 h-[250px] rounded-t-xl overflow-hidden group">
-        
                                         <Image 
                                             src={`/uploads/${encodeURIComponent(product.image_url)}`}
                                             alt={product.item_name}
@@ -187,7 +196,7 @@ export default function Products_Item() {
                                     <button className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white px-5 py-1.5 rounded-md text-sm cursor-pointer" onClick={() => ViewEditProduct(product.product_id, product.item_name, product.description, product.item_price, product.discount_pct)}>
                                         <Pencil size={16} /> Edit
                                     </button>
-                                    <button className="flex items-center gap-1 bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md text-sm cursor-pointer">
+                                    <button className="flex items-center gap-1 bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md text-sm cursor-pointer" onClick={() => Delete_Product(product.product_id)}>
                                         <Trash2 size={16} /> Delete
                                     </button>
                                 </div>
@@ -229,7 +238,15 @@ export default function Products_Item() {
                 variants={variantsEdit}
                 isSubmit={isSubmit}
                 handleVariantValue={handleVariantValue}
-                closeModal={() => setIsEditProduct(false)}/>
+                closeModal={() => setIsEditProduct(false)}
+            />
+
+            <DeleteModal 
+                deleteModal={openDeleteModal}
+                closeModal={() => setOpenDeleteModal(false)}
+                product_id={product_id}
+            />
         </>
+       
     );
 }

@@ -31,7 +31,7 @@ export default function Admin_Header(){
 
     return(
         <>
-            <div className="flex flex-col-reverse justify-between md:flex-row md:px-7 lg:px-0">
+            <div className="flex flex-col-reverse justify-between md:flex-row px-3 md:px-7 lg:px-0">
                 <div className="mt-5 md:mt-0">
                     <p className="text-gray-500 text-[12pt] dark:text-gray-300">Welcome back, {user.fullname} 👋</p>
                     <h1 className="font-semibold text-5xl mt-1">{ToTitleCase(pageTitle)}</h1>

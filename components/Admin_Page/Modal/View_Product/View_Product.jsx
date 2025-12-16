@@ -1,6 +1,6 @@
 
 import { ChevronLeft, ChevronRight, PhilippinePeso, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function View_Product({isViewProduct, closeModal,
     product_name,
@@ -19,7 +19,9 @@ export default function View_Product({isViewProduct, closeModal,
     const prevSlide = () => {
         setCurrent((prev) => (prev === 0 ? 0 : prev - 1))
     }
-    
+    useEffect(() => {
+        setCurrent(0)
+    }, [multipleImage]);
     return(
         <>
             <div className={`fixed top-0 bg-black w-full z-20 left-0 h-screen opacity-80 ${isViewProduct ? 'scale-100' : 'scale-0'}`} onClick={closeModal}></div>

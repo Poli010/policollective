@@ -14,7 +14,7 @@ import axios from "axios";
 
 export default function Add_Product({openAddProducts, setOpenAddProducts, clodeAddProductModal}){
     //CONTROL STATES
-    const [isAddingCategory, setIsAddingCategory] = useState(false);
+    // const [isAddingCategory, setIsAddingCategory] = useState(false);
     const [isSubmit, setIsSubmit] = useState(false);
     const [isCategoryEmpty, setIsCategoryEmpty] = useState(false);
     const [isMainImageEmpty, setIsMainImageEmpty] = useState(false);
@@ -26,7 +26,6 @@ export default function Add_Product({openAddProducts, setOpenAddProducts, clodeA
     const [sizeChartProgress, setsizeChartProgress] = useState(0);
 
     //DATA STATES
-    const [categoryData, setCategoryData] = useState([]);
     const [variants, setVariants] = useState([
         { size: "", color: "", stock: "" }
     ]);
@@ -39,39 +38,6 @@ export default function Add_Product({openAddProducts, setOpenAddProducts, clodeA
     const [file, setFile] = useState(null);  //MAIN IMAGE
     const [files, setFiles] = useState([]); //MULTIPLE IMAGE
     const [sizeChart, setSizeChart] = useState(null);
-
-   
-    useEffect(() => {
-        const fetchData = async () => {
-            try{
-                const response = await axios.get('/api/admin_page/products/fetch_products');
-                if(response.status === 200){
-                    setCategoryData(response.data.result);
-                }
-            }catch(err){
-                if(err.response){
-                    switch(err.response.status){
-                        case 404:
-                            console.log(err.response.data.message);
-                            break;
-                        case 500:
-                            console.log(err.response.data.message);
-                            break;
-                        default:
-                            console.log("Unexpected error", err.response.status);
-                    }
-                }
-            }
-        }
-        fetchData();
-        if(category === "add_category"){
-            setIsAddingCategory(true);
-        }
-        else{
-            setIsAddingCategory(false);
-        }
-    }, [category])
-
 
     const handleVariantValue = (index, field, value) => {
         const newVariants = [...variants];
@@ -116,8 +82,7 @@ export default function Add_Product({openAddProducts, setOpenAddProducts, clodeA
         else{
             try{
                 const formData = new FormData();
-                const adding_category = category === "add_category" ? addingCategory : category;
-                formData.append("category", adding_category);
+                formData.append("category", category);
                 formData.append("item_name", item_name);
                 formData.append("description", description);
                 formData.append("item_price", item_price);
@@ -183,20 +148,21 @@ export default function Add_Product({openAddProducts, setOpenAddProducts, clodeA
                                 <SelectValue placeholder="Select Category" />
                             </SelectTrigger>
                             <SelectContent>
-                                {Array.from(new Set(categoryData?.map(c => c.category))).map((uniqueCategory, index) => (
-                                    <SelectItem key={index} value={uniqueCategory}>{uniqueCategory}</SelectItem>
-                                ))}
-                                <SelectItem value="add_category"><Plus/> Add Category</SelectItem>
+                                <SelectItem value="Tops">Tops</SelectItem>
+                                <SelectItem value="Outerwear">Outerwear</SelectItem>
+                                <SelectItem value="Bottoms">Bottoms</SelectItem>
+                                <SelectItem value="Footwear">Footwear</SelectItem>
+                                <SelectItem value="Accessories">Accessories</SelectItem>
                             </SelectContent>
                         </Select>
                         {isCategoryEmpty && <p className="bg-red-500 flex items-center px-2 rounded-md text-white h-9 mt-2"><CircleAlert/><span className="ml-1">Please select category</span></p>}
                     </div>
-                    {isAddingCategory && 
+                    {/* {isAddingCategory && 
                         <div className="flex flex-col pb-5">
                             <label htmlFor="item_name">Indicate Category: *</label>
                             <input type="text" id="item_name" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex. Hoodie" autoComplete="off" value={addingCategory} onChange={(e) => setAddingCategory(e.target.value)} required/>
                         </div>
-                    }
+                    } */}
                     <div className="flex flex-col pb-5">
                         <label htmlFor="item_name">Item Name: *</label>
                         <input type="text" id="item_name" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex. God's plan shirt" value={item_name} onChange={(e) => setItem_name(e.target.value)} autoComplete="off" required/>

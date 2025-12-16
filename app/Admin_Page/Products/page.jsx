@@ -20,7 +20,7 @@ export default function Products(){
         <>
             <div className="lg:flex max-w-400 mx-auto">
                 <Admin_SideBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}/>
-                <div className={`w-full pt-5 px-4 md:px-7 bg-gray-50 dark:bg-gray-950 ${isSidebarOpen ? 'h-screen overflow-hidden' : ''}`}>
+                <div className={`w-full pt-5 md:px-7 bg-gray-50 dark:bg-gray-950 ${isSidebarOpen ? 'h-screen overflow-hidden' : ''}`}>
                     <Admin_Header/>
                     <div className="bg-white h-auto md:h-[83vh] mt-3 dark:bg-gray-900 rounded-md">
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5 p-5">

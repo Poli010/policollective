@@ -46,11 +46,11 @@ export default function Shop_Now(){
                         </section>
                         <section className="relative shadow-2xl h-[300px] w-[300px] rounded-md bg-black group overflow-hidden cursor-pointer "> 
                             <img src="/Collections/T-Shirt.jpg" alt="T-shirt Collections" className="opacity-30 group-hover:scale-110  transition-all duration-500"  />
-                            <p className="absolute top-1/2 left-1/2 transform -translate-1/2 text-white font-bold text-2xl text-center group-hover:tracking-wider transition-all duration-500">T-Shirt <br/> Collections <br/> <span className="text-sm font-normal underline">View Products </span></p>
+                            <p className="absolute top-1/2 left-1/2 transform -translate-1/2 text-white font-bold text-2xl text-center group-hover:tracking-wider transition-all duration-500">Tops <br/> Collections <br/> <span className="text-sm font-normal underline">View Products </span></p>
                         </section>
                         <section className="relative shadow-2xl h-[300px] w-[300px] rounded-md bg-black group overflow-hidden cursor-pointer "> 
                             <img src="/Collections/Hoodie.jpg" alt="Hoodie Collections" className="opacity-30 group-hover:scale-110  transition-all duration-500"  />
-                            <p className="absolute top-1/2 left-1/2 transform -translate-1/2 text-white font-bold text-2xl text-center group-hover:tracking-wider transition-all duration-500">Hoodie <br/> Collections <br/> <span className="text-sm font-normal underline">View Products </span></p>
+                            <p className="absolute top-1/2 left-1/2 transform -translate-1/2 text-white font-bold text-2xl text-center group-hover:tracking-wider transition-all duration-500">Outerwear <br/> Collections <br/> <span className="text-sm font-normal underline">View Products </span></p>
                         </section>
                         <section className="relative shadow-2xl h-[300px] w-[300px] rounded-md bg-black group overflow-hidden cursor-pointer "> 
                             <img src="/Collections/pants.jpg" alt="BottomsCollections" className="opacity-30 group-hover:scale-110  transition-all duration-500"  />

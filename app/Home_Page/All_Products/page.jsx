@@ -31,15 +31,14 @@ export default function All_Products(){
     }, [])
     return(
         <>
-            <div className="mt-5 p-3 lg:p-10 xl:px-30">
+            <div className="mt-5 lg:p-10 ">
                 <h1 className="text-center font-bold text-2xl">ALL PRODUCTS</h1>
-                <div className="grid place-items-center grid-cols-1 md:grid-cols-3 xl:grid-cols-5 md:gap-x-5 lg:gap-x-25 xl:gap-x-40 gap-y-5 mt-10">
+                <div className="grid place-items-center grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-y-5 md:gap-x-10 mt-10 px-3 md:px-5 lg:px-0">
                     {products.length > 0 ? (
                         products.map((product, index) => (
-                            <div className="flex items-center justify-center" key={index}>
-                                <div className="w-75 md:w-60 lg:w-65 bg-white dark:bg-gray-900 rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-gray-200 dark:border-gray-700">
+                                <div key={index} className="w-full md:w-62 lg:w-75 bg-white dark:bg-gray-900 rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-gray-200 dark:border-gray-700">
                                     <div className='flex items-center justify-center'>
-                                        <div className="relative w-full md:w-60 lg:w-65 h-[250px] rounded-t-xl overflow-hidden group">
+                                        <div className="relative w-full md:w-62 lg:w-75  h-[350px] rounded-t-lg overflow-hidden group">
                                             <Image 
                                                 src={`/uploads/${encodeURIComponent(product.image_url)}`}
                                                 alt={product.item_name}
@@ -47,7 +46,6 @@ export default function All_Products(){
                                                 className="object-cover"
                                             />
                                             {product.discount_pct > 0 && <p className="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-md">{Number(product.discount_pct)}% OFF</p>}
-                                            
                                         </div>
                                     </div>
                                     
@@ -73,13 +71,13 @@ export default function All_Products(){
                                         </div>
                                     </div>
                                     {/* ACTION BUTTONS */}
-                                    <div className="flex justify-between px-10 md:px-4 pb-4">
-                                        <button className="flex items-center justify-center gap-1 bg-black hover:bg-black/90 transition duration-500 text-white w-full px-5 py-1.5 rounded-md text-sm cursor-pointer" >
+                                    <div className="flex items-center justify-center px-2 md:px-4 py-4 ">
+                                        <button className="flex items-center justify-center gap-1 bg-black hover:bg-black/90 transition duration-500 text-white w-full px-5 py-2 rounded-md text-sm cursor-pointer" >
                                             Buy now
                                         </button>
                                     </div>
                                 </div>
-                            </div>  
+                           
                         ))
                         ) : (
                             <div className='mt-10 col-span-full'>

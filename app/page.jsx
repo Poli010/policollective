@@ -12,12 +12,12 @@ export default function Index(){
   const [showLoginModal, setShowLoginModal] = useState(false);
   const {theme} = useTheme();
   const [isOpen, setIsOpen] = useState(false);
-     const [mounted, setMounted] = useState(false);
-     useEffect(() => {
-  setMounted(true);
-}, []);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-if (!mounted) return null;
+  if (!mounted) return null;
   return(
     <>
       <div className="h-auto max-w-400 mx-auto">

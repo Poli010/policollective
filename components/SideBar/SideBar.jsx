@@ -6,6 +6,7 @@ import DarkMode from "./DarkMode";
 import { useTheme } from "next-themes";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
+import ScrollLink from "@/lib/helper/ScrollLink";
 
 export default function SideBar({setShowLoginModal, isOpen, setIsOpen}){
     const [cartCount, setCartCount] = useState(false);
@@ -37,8 +38,8 @@ export default function SideBar({setShowLoginModal, isOpen, setIsOpen}){
                 <div className=" text-lg flex flex-col lg:flex-row lg:items-center lg:w-full lg:justify-end">
                     <Link href="/" className="px-5 py-3 hover:text-blue-500 transition duration-500">Home</Link>
                     <Link href="/Shop_Now" className="px-5 py-3 hover:text-blue-500 transition duration-500">Shop now</Link>
-                    <Link href="#about_us" className="px-5 py-3 hover:text-blue-500 transition duration-500">About</Link>
-                    <Link href="#footer" className="px-5 py-3 hover:text-blue-500 transition duration-500">Contact</Link>
+                    <ScrollLink href="/#about_us">About</ScrollLink>
+                    <ScrollLink href="/#footer">Contact</ScrollLink>
                     <div className="lg:flex flex-col lg:items-center py-3 hidden">
                         {cartCount ? (<div className="absolute bg-red-500 text-white w-5 h-5 flex items-center justify-center rounded-full text-sm ml-8 -mt-4 lg:ml-5">1</div>) : (<div className="hidden">1</div>)}
                         <Link href="/" className="px-5 hover:text-blue-500 transition duration-500 "><ShoppingCart size={25}/></Link>

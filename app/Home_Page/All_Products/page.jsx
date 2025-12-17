@@ -82,14 +82,13 @@ export default function All_Products(){
                         ) : (
                             <div className='mt-10 col-span-full'>
                                 <div className='flex flex-col items-center'>
-                                    <Image src="/Logo/nodata.png" width={500} height={100} alt='No Data Found'/>
+                                    <Image src="/Logo/noData.svg" width={500} height={100} alt='No Data Found'/>
                                     <p className="text-xl">No products found!</p>
                                 </div>
                             </div>
                         )
                     }
                 </div>
-                
             </div>
         </>
     );

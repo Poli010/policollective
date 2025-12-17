@@ -23,7 +23,7 @@ export async function POST(request) {
             }
         }
         else{
-            return Response.json({message: "Please sign up first before you login"}, {status: 404});
+            return Response.json({message: "Wrong Password/Email"}, {status: 404});
         }
     }catch(error){
         return Response.json({error: error.message}, {status: 500});

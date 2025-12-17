@@ -211,7 +211,7 @@ export default function Products_Item() {
                     ) : (
                         <div className='absolute top-[80%] md:top-[50%]'>
                             <div className='flex flex-col items-center'>
-                                <Image src="/Logo/nodata.png" width={300} height={100} alt='No Data Found' sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"/>
+                                <Image src="/Logo/noData.svg" width={300} height={100} alt='No Data Found' sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"/>
                                 <p>No products found!</p>
                             </div>
                         </div>

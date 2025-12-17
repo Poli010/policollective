@@ -72,10 +72,10 @@ export default function Login({showLoginModal, setShowLoginModal, theme}){
                         <input type="password" id="Password" className="border border-black  dark:border-white h-9 rounded-md px-2 outline-blue-500" value={password} onChange={(e) => setPassword(e.target.value)} required/>
                     </div>
                     <div className="mt-2">
-                        {isWrongPassword && <p className="bg-red-500 text-white flex h-9 items-center rounded-md px-2"><CircleAlert/><span className="ml-1">Wrong Password!</span></p>}
+                        {isWrongPassword  && <p className="bg-red-500 text-white flex h-9 items-center rounded-md px-2"><CircleAlert/><span className="ml-1">Wrong Email or Password!</span></p>}
                     </div>
                     <div className="mt-2">
-                        {isNotRegistered && <p className="bg-red-500 text-white flex h-9 items-center rounded-md px-2"><CircleAlert/><span className="ml-1">Please sign up first before login.</span></p>}
+                        {isNotRegistered && <p className="bg-red-500 text-white flex h-9 items-center rounded-md px-2"><CircleAlert/><span className="ml-1">Wrong Email or Password!</span></p>}
                     </div>
                     <div className="text-end mt-3">
                         <Link href="/" className={`${theme === 'dark' ? 'text-blue-300' : 'text-blue-500'}`}>Forgot Password?</Link>

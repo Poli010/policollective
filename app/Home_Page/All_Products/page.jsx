@@ -3,8 +3,12 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { PhilippinePeso, Pencil } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+
 export default function All_Products(){
     const [products, setProducts] = useState([]);
+    const router = useRouter();
     useEffect(() => {
         const fetchData = async () => {
             try{
@@ -28,7 +32,12 @@ export default function All_Products(){
             }
         }
         fetchData()
-    }, [])
+    }, []);
+
+    const handleBuyNow = (product_id) => {
+        router.push(`/Buy_Now?product_id=${product_id}`);
+    }
+
     return(
         <>
             <div className="mt-5 lg:p-10 ">
@@ -72,7 +81,7 @@ export default function All_Products(){
                                     </div>
                                     {/* ACTION BUTTONS */}
                                     <div className="flex items-center justify-center px-2 md:px-4 py-4 ">
-                                        <button className="flex items-center justify-center gap-1 bg-black hover:bg-black/90 transition duration-500 text-white w-full px-5 py-2 rounded-md text-sm cursor-pointer" >
+                                        <button className="flex items-center justify-center gap-1 bg-black hover:bg-black/90 transition duration-500 text-white w-full px-5 py-2 rounded-md text-sm cursor-pointer" onClick={() => handleBuyNow(product.product_id)}>
                                             Buy now
                                         </button>
                                     </div>

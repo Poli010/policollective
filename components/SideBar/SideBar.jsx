@@ -7,6 +7,7 @@ import { useTheme } from "next-themes";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import ScrollLink from "@/lib/helper/ScrollLink";
+import { useRouter } from "next/navigation";
 
 export default function SideBar({setShowLoginModal, isOpen, setIsOpen}){
     const [cartCount, setCartCount] = useState(false);
@@ -14,6 +15,7 @@ export default function SideBar({setShowLoginModal, isOpen, setIsOpen}){
     const [mounted, setMounted] = useState(false);
     const { data: session } = useSession();
     const [session2, setSession2] = useState(false);
+    const router = useRouter();
       useEffect(() => {
         setMounted(true);
         const ifSessionActive = sessionStorage.getItem("session2");
@@ -34,7 +36,7 @@ export default function SideBar({setShowLoginModal, isOpen, setIsOpen}){
             
             <div className={`fixed top-0 left-0 h-screen bg-gray-100 px-5 shadow-lg z-20 transform transition-transform duration-500 ease-in-out w-[80%] lg:flex lg:h-25 lg:w-full lg:mx-auto lg:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"} ${theme === 'dark' ? 'bg-gray-800' : ''}`}>
                 <X  className="absolute top-3 right-5 z-20 cursor-pointer lg:hidden" size={30} onClick={() => setIsOpen(false)}/>
-                {theme === 'dark' ? (<img src='/Logo/darkMode_logo.png' alt="Poli Collective Logo" title="Poli Collective Logo" className="w-[100px] cursor-pointer"/>) : (<img src='/Logo/landing.png' alt="Poli Collective Logo" title="Poli Collective Logo" className="w-[100px] cursor-pointer"/>) }
+                {theme === 'dark' ? (<img src='/Logo/darkMode_logo.png' alt="Poli Collective Logo" title="Poli Collective Logo" className="w-[100px] cursor-pointer" onClick={() => router.push('/')}/>) : (<img src='/Logo/landing.png' alt="Poli Collective Logo" title="Poli Collective Logo" className="w-[100px] cursor-pointer" onClick={() => router.push('/')}/>) }
                 <div className=" text-lg flex flex-col lg:flex-row lg:items-center lg:w-full lg:justify-end">
                     <Link href="/" className="px-5 py-3 hover:text-blue-500 transition duration-500">Home</Link>
                     <Link href="/Shop_Now" className="px-5 py-3 hover:text-blue-500 transition duration-500">Shop now</Link>

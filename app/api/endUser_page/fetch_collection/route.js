@@ -4,7 +4,7 @@ export async function GET(req) {
         const db = await connectToDatabase();
         const { searchParams } = new URL(req.url);
         const category = searchParams.get("category");
-        const [rows] = await db.execute("SELECT * FROM products WHERE category = ?", [category]);
+        const [rows] = await db.execute("SELECT * FROM products WHERE category = ? ORDER BY product_id DESC", [category]);
         if(rows.length > 0){
             return Response.json({result: rows}, {status: 200});
         }

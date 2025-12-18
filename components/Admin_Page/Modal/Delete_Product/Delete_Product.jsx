@@ -27,7 +27,7 @@ export default function Delete_Product({deleteModal, closeModal, product_id}){
                 <div className="flex flex-col items-center">
                     <h1 className="bg-red-100 p-2 rounded-[50%] mt-8"><CircleAlert color="red" width={50} height={50} strokeWidth={1}/></h1>
                     <h1 className="font-bold text-[1.2rem] mt-1">Warning</h1>
-                    <h1 className="text-sm mt-1">Are you sure to return it to pending?</h1>
+                    <h1 className="text-sm mt-1">Are you sure to delete this product?</h1>
                 </div>
                 <div className="mt-8 flex justify-center">
                     <div className="flex justify-between w-[300px]">

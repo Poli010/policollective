@@ -6,12 +6,15 @@ import Login from "@/components/Modal/Login_Modal/Login";
 import { useTheme } from "next-themes";
 import axios from "axios";
 import { PhilippinePeso } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Tops_Collections(){
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [products, setProducts] = useState([]);
     const {theme} = useTheme();
+    const router = useRouter();
+    
     useEffect(() => {
         const fetchData = async() => {
             try{
@@ -41,7 +44,7 @@ export default function Tops_Collections(){
                 <SideBar setShowLoginModal={setShowLoginModal} isOpen={isOpen} setIsOpen={setIsOpen}/>
                  <div className="relative h-auto lg:px-10 xl:px-20">
                     <div className="pt-30">
-                        <h1 className="text-center font-bold text-2xl">Outerwear Collections</h1>
+                        <h1 className="text-center font-bold text-2xl">OUTERWEAR COLLECTIONS</h1>
                     </div>
                     <div className="grid place-items-center grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-y-5 md:gap-x-10 mt-10 px-3 md:px-5 lg:px-0 pb-5">
                         {products.length > 0 ? (
@@ -82,7 +85,7 @@ export default function Tops_Collections(){
                                         </div>
                                         {/* ACTION BUTTONS */}
                                         <div className="flex items-center justify-center px-2 md:px-4 py-4 ">
-                                            <button className="flex items-center justify-center gap-1 bg-black hover:bg-black/90 transition duration-500 text-white w-full px-5 py-2 rounded-md text-sm cursor-pointer" >
+                                            <button className="flex items-center justify-center gap-1 bg-black hover:bg-black/90 transition duration-500 text-white w-full px-5 py-2 rounded-md text-sm cursor-pointer" onClick={() => router.push(`/Buy_Now?product_id=${product.product_id}`)}>
                                                 Buy now
                                             </button>
                                         </div>

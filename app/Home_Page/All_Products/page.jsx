@@ -37,7 +37,7 @@ export default function All_Products(){
     const handleBuyNow = (product_id) => {
         router.push(`/Buy_Now?product_id=${product_id}`);
     }
-
+    
     return(
         <>
             <div className="mt-5 lg:p-10 ">

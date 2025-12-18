@@ -40,7 +40,7 @@ export default function Shop_Now(){
                 <SideBar setShowLoginModal={setShowLoginModal} isOpen={isOpen} setIsOpen={setIsOpen}/>
                 <div className="relative h-auto px-20">
                     <div className="pt-30">
-                        <h1 className="text-center font-bold text-2xl">Collections</h1>
+                        <h1 className="text-center font-bold text-2xl">COLLECTIONS</h1>
                     </div>
                     <div className="grid grid-cols-1 place-items-center md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 lg:gap-x-20 pt-10 pb-10">
                         <section className="relative shadow-2xl h-[300px] w-[300px] rounded-md bg-black group overflow-hidden cursor-pointer" onClick={showAllCollections}> 

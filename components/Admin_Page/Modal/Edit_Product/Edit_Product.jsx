@@ -42,16 +42,16 @@ export default function Edit_Product({
                     <div className="flex flex-col pt-5">
                         <label htmlFor="item_name">Variants: *</label>
                         {variants?.map((variant, index) => (
-                            <div className="grid grid-cols-2 pb-5" key={index}>
+                            <div className="grid grid-cols-1 md:grid-cols-2 pb-5" key={index}>
                                 <div className="flex flex-col">
                                     <label htmlFor="item_name">Size: *</label>
                                     <input type="text" id="item_name" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex. Small, Medium, Large" value={variant.size || ""} onChange={(e) => handleVariantValue(index, "size", e.target.value)} autoComplete="off" required/>
                                 </div>
-                                <div className="flex flex-col pl-1">
+                                <div className="flex flex-col pt-5 md:pt-0 md:pl-1">
                                     <label htmlFor="item_name">Color: (Optional)</label>
                                     <input type="text" id="item_name" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex. Black, White" value={variant.color || ""} onChange={(e) => handleVariantValue(index, "color", e.target.value)} autoComplete="off"/>
                                 </div>
-                                <div className="flex flex-col pt-2 col-span-2">
+                                <div className="flex flex-col pt-5 mdpt-2 md:col-span-2">
                                     <label htmlFor="item_name">Quantity: *</label>
                                     <input inputMode="numeric" id="item_name" className="border border-gray-500 h-10 rounded-md outline-blue-500 px-3 text-sm" placeholder="ex. 10" value={variant.stock_quantity || ""} onChange={(e) => {const onlyNumber = e.target.value.replace(/\D/g, ''); handleVariantValue(index, "stock_quantity", onlyNumber)}} autoComplete="off" required/>
                                 </div>

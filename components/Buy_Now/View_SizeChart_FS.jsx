@@ -7,7 +7,6 @@ export default function View_SizeChart_FS({openSizeChart, size_chart,closeSizeCh
                 <X size={30} className="fixed top-8 right-5 cursor-pointer" onClick={closeSizeChart}/>
                 <img src={`/uploads/${encodeURIComponent(size_chart)}`} alt="Size Chart" className="object-contain h-full w-full"/>
             </div>
-           
         </>
     );
 }

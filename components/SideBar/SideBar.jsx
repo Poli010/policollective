@@ -9,8 +9,8 @@ import { signOut } from "next-auth/react";
 import ScrollLink from "@/lib/helper/ScrollLink";
 import { useRouter } from "next/navigation";
 
-export default function SideBar({setShowLoginModal, isOpen, setIsOpen}){
-    const [cartCount, setCartCount] = useState(false);
+export default function SideBar({setShowLoginModal, isOpen, setIsOpen, cartCount, setCartCount}){
+
     const {theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const { data: session } = useSession();
@@ -18,6 +18,9 @@ export default function SideBar({setShowLoginModal, isOpen, setIsOpen}){
     const router = useRouter();
       useEffect(() => {
         setMounted(true);
+        const storedCart = JSON.parse(localStorage.getItem("Cart")) || [];
+        const totalCart = storedCart.reduce((sum, item) => sum + item.quantity, 0);
+        setCartCount(totalCart);
         const ifSessionActive = sessionStorage.getItem("session2");
         if(ifSessionActive){
             setSession2(true);
@@ -43,7 +46,7 @@ export default function SideBar({setShowLoginModal, isOpen, setIsOpen}){
                     <ScrollLink href="/#about_us">About</ScrollLink>
                     <ScrollLink href="/#footer">Contact</ScrollLink>
                     <div className="lg:flex flex-col lg:items-center py-3 hidden">
-                        {cartCount ? (<div className="absolute bg-red-500 text-white w-5 h-5 flex items-center justify-center rounded-full text-sm ml-8 -mt-4 lg:ml-5">1</div>) : (<div className="hidden">1</div>)}
+                        {cartCount > 0 ? (<div className="absolute bg-red-500 text-white w-5 h-5 flex items-center justify-center rounded-full text-xs ml-8 -mt-4 lg:ml-5">{cartCount}</div>) : (<div className="hidden"></div>)}
                         <Link href="/" className="px-5 hover:text-blue-500 transition duration-500 "><ShoppingCart size={25}/></Link>
                     </div>
                     <div className="px-5 hidden lg:block">
@@ -61,7 +64,7 @@ export default function SideBar({setShowLoginModal, isOpen, setIsOpen}){
                         <Menu className=" lg:hidden cursor-pointer" onClick={() => setIsOpen(true)} size={30}/>
                         <div className="flex">
                             <div className="flex flex-col items-center justify-center">
-                                {cartCount ? (<div className="absolute bg-red-500 text-white w-5 h-5 flex items-center justify-center rounded-full text-sm top-1 ml-5">1</div>) : (<div className="hidden">1</div>)}
+                                {cartCount > 0 ? (<div className="absolute bg-red-500 text-white w-5 h-5 flex items-center justify-center rounded-full text-xs top-1 ml-5">{cartCount}</div>) : (<div className="hidden">1</div>)}
                                 <Link href="/" className="px-5 hover:text-blue-500 transition duration-500 "><ShoppingCart size={25}/></Link>
                             </div>
                             {session || session2 ? (session2 ? (<div className="p-2 border rounded-md cursor-pointer hover:border-blue-500 hover:text-blue-500 transition duration-500"><User/></div>) : (<img src={session.user.image} alt="Poli Collective Logo" title={session.user.name}className="w-10 cursor-pointer rounded-full"/>)) : ( <button className="px-5 cursor-pointer bg-black h-10 w-22 text-white rounded-md hover:bg-gray-700 transition duration-500 text-sm" onClick={() => setShowLoginModal(true)}>Login</button>)}

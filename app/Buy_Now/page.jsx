@@ -5,7 +5,7 @@ import SideBar from "@/components/SideBar/SideBar";
 import { useTheme } from "next-themes";
 import { useSearchParams } from "next/navigation";
 import axios from 'axios';
-import { PhilippinePeso, ShoppingCart, ChevronLeft, ChevronRight } from "lucide-react";
+import { PhilippinePeso, ShoppingCart, ChevronLeft, ChevronRight, CircleAlert } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -14,6 +14,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import View_SizeChart_FS from "@/components/Buy_Now/View_SizeChart_FS";
+import Added_to_Cart from "@/components/Buy_Now/Added_to_Cart";
 
 
 export default function Buy_Now(){
@@ -30,9 +31,15 @@ export default function Buy_Now(){
     const [selectedColor, setSelectedColor] = useState('');
     const [quantity, setQuantity] = useState(1);
     const [current, setCurrent] = useState(0);
+    const [noSelectedColor, setNoSelectedColor] = useState(false);
+    const [noSelectedSize, setNoSelectedSize] = useState(false);
+    const [cartCount, setCartCount] = useState(0);
+    const [isAddtoCart, setIsAddtoCart] = useState(false);
     //CONVERT ARRAY DB INTO STRING
     const multipleImage = product_details.additional_image ? JSON.parse(product_details.additional_image) : []
     useEffect(() => {
+        const cart = localStorage.getItem("Cart");
+        console.log(cart);
         const fetchData = async () => {
             try{
                 const response = await axios.get('/api/endUser_page/buy_now/fetch_product_details', {
@@ -49,7 +56,12 @@ export default function Buy_Now(){
             }
         } 
         fetchData();
-    }, []);
+        if (!isAddtoCart) return;
+        const timeout = setTimeout(() => {
+            setIsAddtoCart(false);
+        }, 5000)
+        return () => clearTimeout(timeout);
+    }, [isAddtoCart]);
 
     const handleSelectedSize = (size) => {
         setSelectedSize(size);
@@ -98,10 +110,42 @@ export default function Buy_Now(){
         setOpenSizeChart(true);
         setSizeChart(size_chart);
     }
+
+    const handleAddtoCart = () => {
+        setNoSelectedColor(false);
+        setNoSelectedSize(false);
+        if(!selectedColor){
+            setNoSelectedColor(true);
+        }
+        else if(!selectedSize){
+            setNoSelectedSize(true);
+        }
+        else{
+            const item = {
+                product_id: product_details.product_id,
+                item_name: product_details.item_name,
+                selected_size: selectedSize,
+                selected_color: selectedColor,
+                quantity: quantity,
+                item_price: product_details.discount_price,
+                image: product_details.image_url
+            }
+            const existingCart = JSON.parse(localStorage.getItem("Cart")) || [];
+            existingCart.push(item);
+            localStorage.setItem("Cart", JSON.stringify(existingCart));
+            setCartCount(cartCount + 1);
+            setIsAddtoCart(true);
+        }
+    }
+
+    const handleBuyNow = () => {
+        setCartCount(cartCount + 1);
+    }
+
     return(
         <>
             <div className="h-auto max-w-400 mx-auto">
-                <SideBar setShowLoginModal={setShowLoginModal} isOpen={isOpen} setIsOpen={setIsOpen}/>
+                <SideBar setShowLoginModal={setShowLoginModal} isOpen={isOpen} setIsOpen={setIsOpen} cartCount={cartCount} setCartCount={setCartCount}/>
                 <div className="relative h-auto lg:px-10 xl:px-20">
                     <div className="pt-30">
                         <h1 className="text-center font-bold text-2xl">Buy Now</h1>
@@ -125,7 +169,7 @@ export default function Buy_Now(){
                                 <div className="flex items-center gap-3 mt-4">
                                     {product_details.discount_pct > 0 &&  <span className="text-gray-400 line-through">₱{product_details.item_price}</span>}
                                     <span className="font-semibold text-xl flex items-center"><PhilippinePeso size={18} className="mr-1" />{product_details.discount_price}</span>
-                                    {product_details.discount_pct > 0 && <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">{Number(product_details.discount_pct)}% OFF</span>}
+                                    {product_details.discount_pct > 0 && <span className="bg-red-700 text-white text-xs font-bold px-2 py-1 rounded">{Number(product_details.discount_pct)}% OFF</span>}
                                 </div>
                                 {product_variants.some(variant => variant.color) && (
                                     <div className="mt-6">
@@ -138,6 +182,7 @@ export default function Buy_Now(){
                                                 </label>
                                             ))}
                                         </div>
+                                        {noSelectedColor && <p className="flex items-center text-red-700 mt-3"><CircleAlert size={18} className="mr-1"/><span>Please select a color.</span></p>}
                                     </div>
                                 )}
                                 <div className="mt-6">
@@ -150,6 +195,7 @@ export default function Buy_Now(){
                                             </label>
                                         ))}
                                     </div>
+                                    {noSelectedSize && <p className="flex items-center text-red-500 mt-3"><CircleAlert size={18} className="mr-1"/><span>Please select a size.</span></p>}
                                 </div>
                                 <div className="mt-6">
                                     <p className="text-sm font-semibold mb-2">Quantity:</p>
@@ -161,8 +207,8 @@ export default function Buy_Now(){
                                 </div>
 
                                 <div className="flex gap-3 mt-6">
-                                    <button className="flex-1 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition cursor-pointer text-sm dark:border-white dark:border">Buy now</button>
-                                    <button className="flex-1 flex items-center justify-center gap-2 py-2 border border-black text-sm rounded-md hover:bg-gray-800 hover:text-white transition cursor-pointer dark:border-white">
+                                    <button className="flex-1 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition cursor-pointer text-sm dark:border-white dark:border" onClick={handleBuyNow}>Buy now</button>
+                                    <button className="flex-1 flex items-center justify-center gap-2 py-2 border border-black text-sm rounded-md hover:bg-gray-800 hover:text-white transition cursor-pointer dark:border-white" onClick={handleAddtoCart}>
                                         <ShoppingCart size={16} />Add to cart
                                     </button>
                                 </div>
@@ -200,6 +246,7 @@ export default function Buy_Now(){
             </div>
             <Login showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} theme={theme} />
             <View_SizeChart_FS openSizeChart={openSizeChart} size_chart={sizeChart} closeSizeChart={() => setOpenSizeChart(false)}/>
+            <Added_to_Cart isAddtoCart={isAddtoCart}/>
         </>
     );
 }

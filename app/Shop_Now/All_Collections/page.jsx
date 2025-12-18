@@ -14,6 +14,7 @@ export default function All_Collections(){
     const [products, setProducts] = useState([]);
     const {theme} = useTheme();
     const router = useRouter();
+    const [cartCount, setCartCount] = useState(0);
 
     useEffect(() => {
         const fetchData = async() => {
@@ -39,7 +40,7 @@ export default function All_Collections(){
     return(
         <>
             <div className="h-auto max-w-400 mx-auto">
-                <SideBar setShowLoginModal={setShowLoginModal} isOpen={isOpen} setIsOpen={setIsOpen}/>
+                <SideBar setShowLoginModal={setShowLoginModal} isOpen={isOpen} setIsOpen={setIsOpen} cartCount={cartCount} setCartCount={setCartCount}/>
                  <div className="relative h-auto lg:px-10 xl:px-20">
                     <div className="pt-30">
                         <h1 className="text-center font-bold text-2xl">ALL COLLECTIONS</h1>

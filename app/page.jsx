@@ -13,7 +13,8 @@ export default function Index(){
   const {theme} = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  
+  const [cartCount, setCartCount] = useState(0);
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -22,7 +23,7 @@ export default function Index(){
   return(
     <>
       <div className="h-auto max-w-400 mx-auto">
-        <SideBar setShowLoginModal={setShowLoginModal} isOpen={isOpen} setIsOpen={setIsOpen}/>
+        <SideBar setShowLoginModal={setShowLoginModal} isOpen={isOpen} setIsOpen={setIsOpen} cartCount={cartCount} setCartCount={setCartCount}/>
         <div className={`relative overflow-hidden bg-linear-to-tr from-[#dda9fd] via-[#b3f0ff] to-[#aa82ee] dark:from-[#0f172a] dark:via-[#020617] dark:to-[#020617] ${isOpen ? "h-[90vh] overflow-hidden" : ""}`}>
           {/* Dark overlay */}
           <div className="absolute inset-0 bg-black/0 dark:bg-black/40 pointer-events-none" />

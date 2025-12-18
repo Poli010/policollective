@@ -10,7 +10,7 @@ export default function Shop_Now(){
     const [isOpen, setIsOpen] = useState(false);
     const {theme} = useTheme();
     const router = useRouter();
-    
+    const [cartCount, setCartCount] = useState(0);
     const showAllCollections = () => {
         router.push('/Shop_Now/All_Collections');
     }
@@ -37,7 +37,7 @@ export default function Shop_Now(){
     return(
         <>
             <div className="h-auto max-w-400 mx-auto">
-                <SideBar setShowLoginModal={setShowLoginModal} isOpen={isOpen} setIsOpen={setIsOpen}/>
+                <SideBar setShowLoginModal={setShowLoginModal} isOpen={isOpen} setIsOpen={setIsOpen} cartCount={cartCount} setCartCount={setCartCount}/>
                 <div className="relative h-auto px-20">
                     <div className="pt-30">
                         <h1 className="text-center font-bold text-2xl">COLLECTIONS</h1>

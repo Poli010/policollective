@@ -14,7 +14,7 @@ export const metadata = {
   title: "Poli Collective",
   description: "Store of Poli Collective",
   icons: {
-    icon: "/Logo/icon.png"
+    icon: "/Logo/Poli_Icon.png"
   }
   
 };

@@ -18,7 +18,7 @@ export default function Products(){
     const [openAddProducts, setOpenAddProducts] = useState(false);
     return(
         <>
-            <div className="lg:flex max-w-400 mx-auto">
+            <div className="lg:flex mx-auto">
                 <Admin_SideBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}/>
                 <div className={`w-full pt-5 md:px-7 bg-gray-50 dark:bg-gray-950 ${isSidebarOpen ? 'h-screen overflow-hidden' : ''}`}>
                     <Admin_Header/>

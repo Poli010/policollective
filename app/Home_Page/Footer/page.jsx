@@ -3,7 +3,7 @@ import { FaFacebook, FaInstagram, FaTiktok } from "react-icons/fa";
 export default function Footer(){
     return (
         <>
-            <footer id="footer" className="border border-black bg-gray-900 px-5 py-10">
+            <footer id="footer" className="border border-black bg-gray-900 px-5 py-10 ">
                 <img src="/Logo/darkMode_logo.png" alt="company logo" className="w-[100px]" />
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5 xl:gap-96 ">

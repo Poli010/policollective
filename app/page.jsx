@@ -22,7 +22,7 @@ export default function Index(){
   if (!mounted) return null;
   return(
     <>
-      <div className="h-auto max-w-400 mx-auto">
+      <div className="h-auto mx-auto">
         <SideBar setShowLoginModal={setShowLoginModal} isOpen={isOpen} setIsOpen={setIsOpen} cartCount={cartCount} setCartCount={setCartCount}/>
         <div className={`relative overflow-hidden bg-linear-to-tr from-[#dda9fd] via-[#b3f0ff] to-[#aa82ee] dark:from-[#0f172a] dark:via-[#020617] dark:to-[#020617] ${isOpen ? "h-[90vh] overflow-hidden" : ""}`}>
           {/* Dark overlay */}

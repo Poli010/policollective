@@ -17,6 +17,7 @@ export default function Bottoms_Collections(){
     const [cartCount, setCartCount] = useState(0);
 
     useEffect(() => {
+        document.title = "Bottoms Collections - Poli Collective"
         const fetchData = async() => {
             try{
                 const response = await axios.get('/api/endUser_page/fetch_collection',{

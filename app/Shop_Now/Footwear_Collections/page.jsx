@@ -17,6 +17,7 @@ export default function Footwear_Collections(){
     const [cartCount, setCartCount] = useState(0);
 
     useEffect(() => {
+        document.title = "Footwear Collections - Poli Collective"
         const fetchData = async() => {
             try{
                 const response = await axios.get('/api/endUser_page/fetch_collection',{

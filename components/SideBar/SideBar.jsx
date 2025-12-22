@@ -19,7 +19,7 @@ export default function SideBar({setShowLoginModal, isOpen, setIsOpen, cartCount
       useEffect(() => {
         setMounted(true);
         const storedCart = JSON.parse(localStorage.getItem("Cart")) || [];
-        const totalCart = storedCart.reduce((sum, item) => sum + item.quantity, 0);
+        const totalCart = storedCart.length
         setCartCount(totalCart);
         const ifSessionActive = sessionStorage.getItem("session2");
         if(ifSessionActive){
@@ -47,7 +47,7 @@ export default function SideBar({setShowLoginModal, isOpen, setIsOpen, cartCount
                     <ScrollLink href="/#footer">Contact</ScrollLink>
                     <div className="lg:flex flex-col lg:items-center py-3 hidden">
                         {cartCount > 0 ? (<div className="absolute bg-red-500 text-white w-5 h-5 flex items-center justify-center rounded-full text-xs ml-8 -mt-4 lg:ml-5">{cartCount}</div>) : (<div className="hidden"></div>)}
-                        <Link href="/" className="px-5 hover:text-blue-500 transition duration-500 "><ShoppingCart size={25}/></Link>
+                        <Link href="/Cart_Page" className="px-5 hover:text-blue-500 transition duration-500 "><ShoppingCart size={25}/></Link>
                     </div>
                     <div className="px-5 hidden lg:block">
                         {session || session2 ? (session2 ? (<div className="p-2 border rounded-md cursor-pointer hover:border-blue-500 hover:text-blue-500 transition duration-500"><User/></div>) : (<img src={ session.user.image} alt="Poli Collective Logo" title={session.user.name} className="w-10 cursor-pointer rounded-full"/>)) : ( <button className="px-5 cursor-pointer bg-black h-10 w-22 text-white rounded-md hover:bg-gray-500 transition duration-500 text-sm" onClick={() => setShowLoginModal(true)}>Login</button>)}
@@ -65,7 +65,7 @@ export default function SideBar({setShowLoginModal, isOpen, setIsOpen, cartCount
                         <div className="flex">
                             <div className="flex flex-col items-center justify-center">
                                 {cartCount > 0 ? (<div className="absolute bg-red-500 text-white w-5 h-5 flex items-center justify-center rounded-full text-xs top-1 ml-5">{cartCount}</div>) : (<div className="hidden">1</div>)}
-                                <Link href="/" className="px-5 hover:text-blue-500 transition duration-500 "><ShoppingCart size={25}/></Link>
+                                <Link href="/Cart_Page" className="px-5 hover:text-blue-500 transition duration-500 "><ShoppingCart size={25}/></Link>
                             </div>
                             {session || session2 ? (session2 ? (<div className="p-2 border rounded-md cursor-pointer hover:border-blue-500 hover:text-blue-500 transition duration-500"><User/></div>) : (<img src={session.user.image} alt="Poli Collective Logo" title={session.user.name}className="w-10 cursor-pointer rounded-full"/>)) : ( <button className="px-5 cursor-pointer bg-black h-10 w-22 text-white rounded-md hover:bg-gray-700 transition duration-500 text-sm" onClick={() => setShowLoginModal(true)}>Login</button>)}
                             {session || session2 ? (<div className="pl-3"><LogOut className="cursor-pointer hover:text-blue-500 transition duration-500 " onClick={() => {signOut("google"), setSession2(false), sessionStorage.removeItem("session2")}} /></div>) : (<div className="hidden">asd</div>)}

@@ -1,7 +1,7 @@
 'use client'
 import Login from "@/components/Modal/Login_Modal/Login";
 import SideBar from "@/components/SideBar/SideBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 
@@ -11,6 +11,11 @@ export default function Shop_Now(){
     const {theme} = useTheme();
     const router = useRouter();
     const [cartCount, setCartCount] = useState(0);
+
+    useEffect(() => {
+        document.title = "Collections - Poli Collective"
+    }, []);
+
     const showAllCollections = () => {
         router.push('/Shop_Now/All_Collections');
     }

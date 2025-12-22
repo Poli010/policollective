@@ -17,6 +17,7 @@ export default function All_Collections(){
     const [cartCount, setCartCount] = useState(0);
 
     useEffect(() => {
+        document.title = "All Collections - Poli Collective"
         const fetchData = async() => {
             try{
                 const response = await axios.get('/api/admin_page/products/fetch_products');

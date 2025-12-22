@@ -38,8 +38,6 @@ export default function Buy_Now(){
     //CONVERT ARRAY DB INTO STRING
     const multipleImage = product_details.additional_image ? JSON.parse(product_details.additional_image) : []
     useEffect(() => {
-        const cart = localStorage.getItem("Cart");
-        console.log(cart);
         const fetchData = async () => {
             try{
                 const response = await axios.get('/api/endUser_page/buy_now/fetch_product_details', {
@@ -123,6 +121,7 @@ export default function Buy_Now(){
         else{
             const item = {
                 product_id: product_details.product_id,
+                category: product_details.category,
                 item_name: product_details.item_name,
                 selected_size: selectedSize,
                 selected_color: selectedColor,
@@ -131,10 +130,30 @@ export default function Buy_Now(){
                 image: product_details.image_url
             }
             const existingCart = JSON.parse(localStorage.getItem("Cart")) || [];
-            existingCart.push(item);
-            localStorage.setItem("Cart", JSON.stringify(existingCart));
-            setCartCount(cartCount + 1);
-            setIsAddtoCart(true);
+            // Check if same product/color/size exists
+            const index = existingCart.findIndex(
+                (p) => 
+                    p.product_id === item.product_id &&
+                    p.selected_color === item.selected_color &&
+                    p.selected_size === item.selected_size
+            );
+            //if(index !== -1) means if data exist in array this used in javascript array not like in fetching in db
+            if(index !== -1){
+                //+= is to set the existingCart[index] data to its answer. 
+                // Example: 
+                // let x = 5; 
+                // x + 3; evaluates to 8, but x is still 5
+                // x += 3; x becomes 8
+                existingCart[index].quantity += item.quantity;
+                localStorage.setItem("Cart", JSON.stringify(existingCart));
+                setIsAddtoCart(true);
+            }
+            else{
+                const newCart = [item, ...existingCart];
+                localStorage.setItem("Cart", JSON.stringify(newCart));
+                setCartCount(cartCount + 1);
+                setIsAddtoCart(true);
+            }
         }
     }
 

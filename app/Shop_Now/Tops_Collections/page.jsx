@@ -7,6 +7,7 @@ import { useTheme } from "next-themes";
 import axios from "axios";
 import { PhilippinePeso } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Footer from "@/app/Home_Page/Footer/page";
 
 export default function Tops_Collections(){
     const [showLoginModal, setShowLoginModal] = useState(false);
@@ -44,7 +45,7 @@ export default function Tops_Collections(){
         <>
             <div className="h-auto max-w-400 mx-auto">
                 <SideBar setShowLoginModal={setShowLoginModal} isOpen={isOpen} setIsOpen={setIsOpen} cartCount={cartCount} setCartCount={setCartCount}/>
-                 <div className="relative h-auto lg:px-10 xl:px-20">
+                 <div className="relative h-auto lg:px-10 xl:px-20 pb-20">
                     <div className="pt-30">
                         <h1 className="text-center font-bold text-2xl">TOPS COLLECTIONS</h1>
                     </div>
@@ -105,6 +106,7 @@ export default function Tops_Collections(){
                         }
                     </div>
                 </div>
+                <Footer/>
             </div>
             <Login showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} theme={theme} />
         </>

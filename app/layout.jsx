@@ -12,7 +12,7 @@ const poppins = Poppins({
 
 export const metadata = {
   title: "Poli Collective",
-  description: "Store of Poli Collective",
+  description: "Clothing Store for Poli Collective",
   icons: {
     icon: "/Logo/Poli_Icon.png"
   }

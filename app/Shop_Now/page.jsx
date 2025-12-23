@@ -4,6 +4,7 @@ import SideBar from "@/components/SideBar/SideBar";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
+import Footer from "../Home_Page/Footer/page";
 
 export default function Shop_Now(){
     const [showLoginModal, setShowLoginModal] = useState(false);
@@ -43,7 +44,7 @@ export default function Shop_Now(){
         <>
             <div className="h-auto max-w-400 mx-auto">
                 <SideBar setShowLoginModal={setShowLoginModal} isOpen={isOpen} setIsOpen={setIsOpen} cartCount={cartCount} setCartCount={setCartCount}/>
-                <div className="relative h-auto px-20">
+                <div className="relative h-auto px-20 pb-20">
                     <div className="pt-30">
                         <h1 className="text-center font-bold text-2xl">COLLECTIONS</h1>
                     </div>
@@ -74,6 +75,7 @@ export default function Shop_Now(){
                         </section>
                     </div>
                 </div>
+                <Footer/>
             </div>
             <Login showLoginModal={showLoginModal} setShowLoginModal={setShowLoginModal} theme={theme} />
         </>

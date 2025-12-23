@@ -19,8 +19,8 @@ export default function Footer(){
                         <a href="https://www.tiktok.com/@policollective" target="_blank"  className="hover:text-blue-500 transition flex items-center md:pl-5"><FaTiktok size={18}/> <span className="ml-1">Poli Collective</span></a>
                     </div>
                     <div className="text-white text-sm flex flex-col ">
-                        <a href="/terms-of-use" className="hover:text-blue-500 transition pb-2">Terms of Use</a>
-                        <a href="/privacy-policy" className="hover:text-blue-500 transition">Privacy Policy</a>
+                        <a href="/Policies/Terms_of_Use" className="hover:text-blue-500 transition pb-2">Terms of Use</a>
+                        <a href="/Policies/Privacy_Policy" className="hover:text-blue-500 transition">Privacy Policy</a>
                     </div>
                 </div>
                 <div className="mt-10 text-center text-xs text-gray-400">© 2025 Poli Collective. All rights reserved.</div>

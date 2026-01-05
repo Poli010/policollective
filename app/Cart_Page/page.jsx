@@ -87,7 +87,7 @@ export default function Cart_Page(){
     const subtotal = product.reduce((total, item) => total + item.item_price * item.quantity, 0);
 
     const handleCheckOut = () => {
-        router.push('/Check_Out');
+        router.push('/Check_Out?mode=cart');
     }
 
     return(

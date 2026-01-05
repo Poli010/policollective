@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Login from "@/components/Modal/Login_Modal/Login";
 import SideBar from "@/components/SideBar/SideBar";
 import { useTheme } from "next-themes";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import axios from 'axios';
 import { PhilippinePeso, ShoppingCart, ChevronLeft, ChevronRight, CircleAlert } from "lucide-react";
 import {
@@ -36,7 +36,8 @@ export default function Buy_Now(){
     const [cartCount, setCartCount] = useState(0);
     const [isAddtoCart, setIsAddtoCart] = useState(false);
     //CONVERT ARRAY DB INTO STRING
-    const multipleImage = product_details.additional_image ? JSON.parse(product_details.additional_image) : []
+    const multipleImage = product_details.additional_image ? JSON.parse(product_details.additional_image) : [];
+    const router = useRouter();
     useEffect(() => {
         const fetchData = async () => {
             try{
@@ -158,8 +159,30 @@ export default function Buy_Now(){
     }
 
     const handleBuyNow = () => {
-        setCartCount(cartCount + 1);
-    }
+        if (!selectedColor) {
+            setNoSelectedColor(true);
+            return;
+        }
+        if (!selectedSize) {
+            setNoSelectedSize(true);
+            return;
+        }
+
+        const buyNowItem = [{
+            product_id: product_details.product_id,
+            category: product_details.category,
+            item_name: product_details.item_name,
+            selected_size: selectedSize,
+            selected_color: selectedColor,
+            quantity,
+            item_price: product_details.discount_price,
+            image: product_details.image_url
+        }];
+
+        localStorage.setItem("BuyNow", JSON.stringify(buyNowItem));
+        router.push("/Check_Out?mode=buy-now");
+    };
+
 
     return(
         <>
@@ -226,7 +249,7 @@ export default function Buy_Now(){
                                 </div>
 
                                 <div className="flex gap-3 mt-6">
-                                    <button className="flex-1 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition cursor-pointer text-sm dark:border-white dark:border" onClick={handleBuyNow}>Buy now</button>
+                                    <button type="button" className="flex-1 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition cursor-pointer text-sm dark:border-white dark:border" onClick={handleBuyNow}>Buy now</button>
                                     <button className="flex-1 flex items-center justify-center gap-2 py-2 border border-black text-sm rounded-md hover:bg-gray-800 hover:text-white transition cursor-pointer dark:border-white" onClick={handleAddtoCart}>
                                         <ShoppingCart size={16} />Add to cart
                                     </button>

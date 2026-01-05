@@ -43,7 +43,7 @@ export default function Admin_SideBar({isSidebarOpen, setIsSidebarOpen}){
                         <Link href="/Admin_Page/Products" className={`flex h-10 items-center hover:bg-gray-700 hover:text-white rounded-lg px-2 transition ${activeLink === "products" ? 'bg-gray-700 text-white' : ''}`} onClick={() => handleActive("products")}><Tag/><span className="ml-2">Products</span></Link>
                     </div>
                     <div className="py-2">
-                        <Link href="#" className={`flex h-10 items-center hover:bg-gray-700 hover:text-white rounded-lg px-2 transition  ${activeLink === "orders" ? 'bg-gray-700 text-white' : ''}`} onClick={() => handleActive("orders")}><ShoppingCart/><span className="ml-2">Orders</span></Link>
+                        <Link href="/Admin_Page/Orders" className={`flex h-10 items-center hover:bg-gray-700 hover:text-white rounded-lg px-2 transition  ${activeLink === "orders" ? 'bg-gray-700 text-white' : ''}`} onClick={() => handleActive("orders")}><ShoppingCart/><span className="ml-2">Orders</span></Link>
                     </div>
                     <div className="py-2">
                         <Link href="#" className={`flex h-10 items-center hover:bg-gray-700 hover:text-white rounded-lg px-2 transition ${activeLink === "earnings" ? 'bg-gray-700 text-white' : ''}`} onClick={() => handleActive("earnings")}><Wallet/><span className="ml-2">Earnings</span></Link>

@@ -1,7 +1,7 @@
 'use client'
 import DarkMode from "@/components/SideBar/DarkMode";
 import { ShoppingCart, PhilippinePeso, Wallet, HandCoins, Motorbike } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import {
   Select,
@@ -17,7 +17,11 @@ import { useTheme } from "next-themes";
 
 export default function Check_Out(){
     const router = useRouter();
+    const [email, setEmail] = useState('');
     const [phone_number, setPhone_number] = useState('');
+    const [first_name, setFirst_name] = useState('');
+    const [last_name, setLast_name] = useState('');
+    const [line_1, setLine_1] = useState('');
     const [regions, setRegions] = useState([]);
     const [provinces, setProvinces] = useState([]);
     const [cities, setCities] = useState([]);
@@ -26,15 +30,27 @@ export default function Check_Out(){
     const [selected_provinces, setSelected_provinces] = useState("");
     const [selected_cities, setSelected_cities] = useState("");
     const [selected_barangay, setSelected_barangay] = useState("");
-    const [selected_payment, setSelected_payment] = useState("");
+    const [selected_payment, setSelected_payment] = useState("gcash");
     const [selected_shipping, setSelected_shipping] = useState("");
     const [shippingFee, setShippingFee] = useState(0);
     const [cartData, setCartData] = useState([]);
     const {theme, setTheme} = useTheme();
-    console.log(`Region: ${selected_region}, Province: ${selected_provinces}, City: ${selected_cities}, Brgy: ${selected_barangay}`)
+    const [mounted, setMounted] = useState(false) 
+    const searchParams = useSearchParams();
+    const mode = searchParams.get("mode")
+
     useEffect(() => {
-        const cartLocal = localStorage.getItem("Cart") || [];
-        setCartData(JSON.parse(cartLocal));
+        setMounted(true);
+        if(mode === "buy-now"){
+            const buyNow = JSON.parse(localStorage.getItem("BuyNow")) || [];
+            setCartData(buyNow);
+        }
+        else{
+            const cartLocal = localStorage.getItem("Cart") || [];
+            setCartData(JSON.parse(cartLocal));
+        }
+
+
         const fetchRegion = async() => {
             try{
                 const response = await axios.get('/api/endUser_page/country_address/region');
@@ -121,108 +137,153 @@ export default function Check_Out(){
         
         //FREE / NEAR BARANGAYS (SJDM only)
         if (selected_region === "03" && selected_provinces === "314" && selected_cities === "31420" && FREE_BARANGAYS.includes(selected_barangay)) {
-            setShippingFee(1);
-            setSelected_shipping("poliRider");
+            setShippingFee(0);
+            setSelected_shipping("Poli_Rider");
         }
 
         // SAME CITY (SJDM but far barangay)
         else if (selected_cities === "31420") {
             setShippingFee(25);
-            setSelected_shipping("poliRider");
+            setSelected_shipping("Poli_Rider");
         }
 
         //SAME PROVINCE (Bulacan)
         else if (selected_region === "03" && selected_provinces === "314") {
             setShippingFee(75);
-            setSelected_shipping("JnT");
+            setSelected_shipping("J&T_Express");
+            setSelected_payment("gcash");
         }
 
         //REGION III (Zambales, Aurora, Pampanga, etc.)
         else if (selected_region === "03") {
             setShippingFee(125);
-            setSelected_shipping("JnT");
+            setSelected_shipping("J&T_Express");
+            setSelected_payment("gcash");
         }
 
         //NCR
         else if (selected_region === "13") {
             setShippingFee(90);
-            setSelected_shipping("JnT");
+            setSelected_shipping("J&T_Express");
+            setSelected_payment("gcash");
         }
 
         //NEAR LUZON
         else if (["01", "04", "14"].includes(selected_region)) {
             setShippingFee(160);
-            setSelected_shipping("JnT");
+            setSelected_shipping("J&T_Express");
+            setSelected_payment("gcash");
         }
 
         //FAR LUZON
         else if (["02", "17", "05"].includes(selected_region)) {
             setShippingFee(180);
-            setSelected_shipping("JnT");
+            setSelected_shipping("J&T_Express");
+            setSelected_payment("gcash");
         }
 
         //VISAYAS
         else if (["06", "07", "08"].includes(selected_region)) {
             setShippingFee(280);
-            setSelected_shipping("JnT");
+            setSelected_shipping("J&T_Express");
+            setSelected_payment("gcash");
         }
 
         //MINDANAO
         else {
             setShippingFee(320);
-            setSelected_shipping("JnT");
+            setSelected_shipping("J&T_Express");
+            setSelected_payment("gcash");
         }
         
         
-    }, [selected_region, selected_provinces, selected_cities, selected_barangay]);
+    }, [selected_region, selected_provinces, selected_cities, selected_barangay, mode]);
+
+    if(!mounted) return null;
 
     //COMPUTE TOTAL PAYMENT
 
     const subtotal = cartData.reduce((total, data) => total + data.item_price * data.quantity, 0);
     const totalPayment = subtotal + shippingFee;
+    const FREE_BARANGAYS = [
+        "31420002",
+        "31420004",
+        "31420008",
+        "31420010",
+        "31420003"
+    ];
+
+    const handlePlaceOrder = async(e) => {
+        e.preventDefault();
+        try{
+            const response = await axios.post('/api/endUser_page/payment', {
+                email: email,
+                contact_number: phone_number,
+                first_name: first_name,
+                last_name: last_name,
+                line_1: line_1,
+                region: selected_region,
+                province: selected_provinces,
+                city: selected_cities,
+                barangay: selected_barangay,
+                shipping_method: selected_shipping,
+                payment_method: selected_payment,
+                items: cartData,
+                totalPayment: totalPayment
+            });
+            if(response.status === 200){
+                alert("BUY SUCCESS");
+            }
+        }catch(err){
+            if(err.response){
+                console.log(err.response.data.message);
+            }
+        }
+    }
     return(
         <>
             <div className="h-auto max-w-400 mx-auto px-3 md:px-10 xl:px-40 ">
                 <div className="flex items-center justify-between lg:pl-16 xl:pl-26">
                     <div className="w-32">
-                        <img src="/Logo/landing.png" alt="Poli Collective Logo" className="w-full h-full cursor-pointer" onClick={() => router.push('/')}/>
+                        {theme === "dark" ? (<img src="/Logo/darkMode_logo.png" alt="Poli Collective Logo" className="w-full h-full cursor-pointer" onClick={() => router.push('/')}/>) : (<img src="/Logo/landing.png" alt="Poli Collective Logo" className="w-full h-full cursor-pointer" onClick={() => router.push('/')}/>)}
+                        
                     </div>
                     <div className="flex items-center">
-                        <ShoppingCart onClick={() => router.push('/Cart_Page')} className="mr-3"/>
+                        <ShoppingCart onClick={() => router.push('/Cart_Page')} className="mr-3 cursor-pointer hover:text-blue-500 transition"/>
                         <DarkMode theme={theme} setTheme={setTheme}/>
                     </div>
                 </div>
                 <div>
                     <h1 className="text-xl font-semibold lg:pl-20 xl:pl-30">Delivery</h1>
-                    <form className="grid grid-cols-1 lg:grid-cols-3 ">
+                    <form className="grid grid-cols-1 lg:grid-cols-3" onSubmit={handlePlaceOrder}>
                         {/* First Box */}
                         <div className="lg:order-1 lg:col-span-2  lg:pr-10 lg:pl-20 xl:pl-30">
                             <div className="relative  mt-3 lg:mt-7">
-                                <input type="email" id="email" placeholder="" className="peer w-full h-12 border border-gray-400 rounded-md px-3 focus:outline-none focus:border-blue-600"/>
-                                <label htmlFor="email" className="absolute text-sm left-3 top-1/2 -translate-y-1/2 text-gray-500 bg-white px-1 transition-all peer-focus:top-0 peer-focus:text-sm peer-focus:text-gray-600 peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:text-sm"> Email *</label>
+                                <input type="email" id="email" placeholder="" className="peer w-full h-12 border border-gray-400 rounded-md px-3 focus:outline-none focus:border-blue-600" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                                <label htmlFor="email" className="absolute text-sm left-3 top-1/2 -translate-y-1/2 text-gray-500 bg-white dark:bg-[#0A0A0A] px-1 transition-all peer-focus:top-0 peer-focus:text-sm peer-focus:text-gray-600 peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:text-sm"> Email *</label>
                             </div>
                             <div className="relative  mt-7">
-                                <input inputMode="numeric" placeholder="" maxLength={12} id="phone_number" className="peer w-full h-12 border border-gray-400 rounded-md px-3 focus:outline-none focus:border-blue-500" value={phone_number} onChange={(e) => {const onlyNumber = e.target.value.replace(/\D/g, ''); setPhone_number(onlyNumber)}}/>
-                                <label htmlFor="phone_number" placeholder="" className="absolute text-sm left-3 top-1/2 -translate-y-1/2 text-gray-500 bg-white px-1 transition-all peer-focus:top-0 peer-focus:text-sm peer-focus:text-gray-600 peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:text-sm"> Phone Number *</label>
+                                <input inputMode="numeric" placeholder="" maxLength={12} id="phone_number" className="peer w-full h-12 border border-gray-400 rounded-md px-3 focus:outline-none focus:border-blue-500" value={phone_number} onChange={(e) => {const onlyNumber = e.target.value.replace(/\D/g, ''); setPhone_number(onlyNumber)}} required/>
+                                <label htmlFor="phone_number" placeholder="" className="absolute text-sm left-3 top-1/2 -translate-y-1/2 text-gray-500 bg-white dark:bg-[#0A0A0A] px-1 transition-all peer-focus:top-0 peer-focus:text-sm peer-focus:text-gray-600 peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:text-sm"> Phone Number *</label>
                             </div>
                             <div className="flex flex-col lg:flex-row justify-center items-center ">
                                 <div className="relative w-full mt-7">
-                                    <input type="text" id="first_name" placeholder="" className="peer w-full h-12 border border-gray-400 rounded-md px-3 focus:outline-none focus:border-blue-500"/>
-                                    <label htmlFor="first_name" className="absolute text-sm left-3 top-1/2 -translate-y-1/2 text-gray-500 bg-white px-1 transition-all peer-focus:top-0 peer-focus:text-sm peer-focus:text-gray-600  peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:text-sm"> First Name *</label>
+                                    <input type="text" id="first_name" placeholder="" className="peer w-full h-12 border border-gray-400 rounded-md px-3 focus:outline-none focus:border-blue-500" value={first_name} onChange={(e) => setFirst_name(e.target.value)} required/>
+                                    <label htmlFor="first_name" className="absolute text-sm left-3 top-1/2 -translate-y-1/2 text-gray-500 bg-white dark:bg-[#0A0A0A] px-1 transition-all peer-focus:top-0 peer-focus:text-sm peer-focus:text-gray-600  peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:text-sm"> First Name *</label>
                                 </div>
                                 <div className="relative w-full lg:ml-5 mt-7">
-                                    <input type="text" id="last_name" placeholder="" className="peer w-full h-12 border border-gray-400 rounded-md px-3 focus:outline-none focus:border-blue-500"/>
-                                    <label htmlFor="last_name" className="absolute text-sm left-3 top-1/2 -translate-y-1/2 text-gray-500 bg-white px-1 transition-all peer-focus:top-0 peer-focus:text-sm peer-focus:text-gray-600  peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:text-sm"> Last Name *</label>
+                                    <input type="text" id="last_name" placeholder="" className="peer w-full h-12 border border-gray-400 rounded-md px-3 focus:outline-none focus:border-blue-500" value={last_name} onChange={(e) => setLast_name(e.target.value)} required/>
+                                    <label htmlFor="last_name" className="absolute text-sm left-3 top-1/2 -translate-y-1/2 text-gray-500 bg-white dark:bg-[#0A0A0A] px-1 transition-all peer-focus:top-0 peer-focus:text-sm peer-focus:text-gray-600  peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:text-sm"> Last Name *</label>
                                 </div>
                             </div>
                             <div className="relative  mt-7">
-                                <input type="text" id="address" placeholder="" className="peer w-full h-12 border border-gray-400 rounded-md px-3 focus:outline-none focus:border-blue-500"/>
-                                <label htmlFor="address" placeholder="" className="absolute left-3 top-1/2  -translate-y-1/2 text-sm text-gray-500 bg-white px-1 overflow-hidden transition-all peer-focus:top-0 peer-focus:text-sm peer-focus:text-gray-600 peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:text-sm"> Address (house#, st, subdivision)*</label>
+                                <input type="text" id="address" placeholder="" className="peer w-full h-12 border border-gray-400 rounded-md px-3 focus:outline-none focus:border-blue-500" value={line_1} onChange={(e) => setLine_1(e.target.value)} required/>
+                                <label htmlFor="address" placeholder="" className="absolute left-3 top-1/2  -translate-y-1/2 text-sm text-gray-500 bg-white dark:bg-[#0A0A0A] px-1 overflow-hidden transition-all peer-focus:top-0 peer-focus:text-sm peer-focus:text-gray-600 peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:text-sm"> Address (house#, st, subdivision)*</label>
                             </div>
                             <div className="relative mt-7">
-                                <Select value={selected_region} onValueChange={(value) => setSelected_region(value)}>
+                                <Select value={selected_region} onValueChange={(value) => setSelected_region(value)} required>
                                     <SelectTrigger className={`w-full min-h-12 border-gray-400 cursor-pointer`}>
-                                        <SelectValue placeholder="Select Region" />
+                                        <SelectValue placeholder="Select Region *" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
@@ -235,9 +296,9 @@ export default function Check_Out(){
                                 </Select>
                             </div>
                             <div className="relative  mt-7">
-                                <Select value={selected_provinces} onValueChange={(value) => setSelected_provinces(value)}>
+                                <Select value={selected_provinces} onValueChange={(value) => setSelected_provinces(value)} required>
                                     <SelectTrigger className={`w-full min-h-12 border-gray-400 cursor-pointer`}>
-                                        <SelectValue placeholder="Select Province" />
+                                        <SelectValue placeholder="Select Province *" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
@@ -253,9 +314,9 @@ export default function Check_Out(){
                                 </Select>
                             </div>
                             <div className="relative mt-7">
-                                <Select value={selected_cities} onValueChange={(value) => setSelected_cities(value)}>
+                                <Select value={selected_cities} onValueChange={(value) => setSelected_cities(value)} required>
                                     <SelectTrigger className={`w-full min-h-12 border-gray-400 cursor-pointer`}>
-                                        <SelectValue placeholder="Select City" />
+                                        <SelectValue placeholder="Select City *" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
@@ -270,9 +331,9 @@ export default function Check_Out(){
                                 </Select>
                             </div>
                             <div className="relative mt-7">
-                                <Select value={selected_barangay} onValueChange={(value) => setSelected_barangay(value)}>
+                                <Select value={selected_barangay} onValueChange={(value) => setSelected_barangay(value)} required>
                                     <SelectTrigger className={`w-full min-h-12 border-gray-400 cursor-pointer`}>
-                                        <SelectValue placeholder="Select Barangay" />
+                                        <SelectValue placeholder="Select Barangay *" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
@@ -289,54 +350,54 @@ export default function Check_Out(){
                             <div className="mt-7">
                                 <p className="text-lg font-semibold">Shipping method</p>
                                 {selected_barangay === "" ? (
-                                    <p className="bg-gray-100 p-5 rounded-md text-gray-600 text-sm">Fill up your address first to show shipping method</p>
+                                    <p className="bg-gray-100 dark:bg-gray-800 p-5 rounded-md text-gray-600 dark:text-gray-500 text-sm mt-2">Fill up your address first to show shipping method</p>
                                 ) : selected_cities === "31420" ? (
                                     <div>
-                                        <label htmlFor="poliRider" className="flex items-center w-full justify-between py-5 px-5 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-200 transition duration-500 mb-3">
+                                        <label htmlFor="Poli_Rider" className="flex items-center w-full justify-between py-5 px-5 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-200 transition duration-500 mb-3 dark:hover:bg-gray-900">
                                             <span className="flex items-center"><Motorbike size={20} className="mr-3"/>Poli Collective Rider</span> 
-                                            <span><input type="radio" id="poliRider" className="h-4 w-4 accent-blue-500" value="poliRider" checked={selected_shipping === "poliRider"} onChange={() => setSelected_shipping('poliRider')}/></span>
+                                            <span><input type="radio" id="Poli_Rider" className="h-4 w-4 accent-blue-500" value="Poli_Rider" checked={selected_shipping === "Poli_Rider"} onChange={() => setSelected_shipping('Poli_Rider')}/></span>
                                         </label>
-                                        <p className="bg-gray-100 p-5 rounded-md text-gray-600 text-justify text-sm">Estimated delivery: 7–14 business days (includes order preparation and shipping). May arrive earlier. If your parcel hasn’t arrived after this period, please contact us.</p>
+                                        <p className="bg-gray-100 p-5 rounded-md text-gray-600 text-justify text-sm dark:bg-gray-800 dark:text-gray-400">Estimated delivery: 7–14 business days (includes order preparation and shipping). May arrive earlier. If your parcel hasn’t arrived after this period, please contact us.</p>
                                     </div>
                                 ) : (
                                     <div>
-                                        <label htmlFor="JnT" className="flex items-center w-full justify-between py-5 px-5 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-200 transition duration-500 mb-3">
-                                            <span className="flex items-center"><img src="/Logo/JnT.png" alt="J&T Logo" className="w-10 h-10 mr-3 object-contain"/>J&T Express</span> 
-                                            <span><input type="radio" id="JnT" className="h-4 w-4 accent-blue-500" value="JnT" checked={selected_shipping === "JnT"} onChange={() => setSelected_shipping('JnT')}/></span>
+                                        <label htmlFor="J&T_Express" className="flex items-center w-full justify-between py-5 px-5 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-200 transition duration-500 mb-3 dark:hover:bg-gray-900">
+                                            <span className="flex items-center"><img src="/Logo/J&T_Express.png" alt="J&T Logo" className="w-10 h-10 mr-3 object-contain"/>J&T Express</span> 
+                                            <span><input type="radio" id="J&T_Express" className="h-4 w-4 accent-blue-500" value="J&T_Express" checked={selected_shipping === "J&T_Express"} onChange={() => setSelected_shipping('J&T_Express')}/></span>
                                         </label>
-                                        <label htmlFor="spx" className="flex items-center w-full justify-between py-5 px-5 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-200 transition duration-500 mb-3">
-                                            <span className="flex items-center"><img src="/Logo/spx.svg" alt="J&T Logo" className="w-10 h-10 mr-3 object-contain"/>SPX Express</span> 
-                                            <span><input type="radio" id="spx" className="h-4 w-4 accent-blue-500" value="spx" checked={selected_shipping === "spx"} onChange={() => setSelected_shipping('spx')}/></span>
+                                        <label htmlFor="SPX_Express" className="flex items-center w-full justify-between py-5 px-5 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-200 transition duration-500 mb-3 dark:hover:bg-gray-900">
+                                            <span className="flex items-center"><img src="/Logo/SPX_Express.svg" alt="J&T Logo" className="w-10 h-10 mr-3 object-contain"/>SPX_Express Express</span> 
+                                            <span><input type="radio" id="SPX_Express" className="h-4 w-4 accent-blue-500" value="SPX_Express" checked={selected_shipping === "SPX_Express"} onChange={() => setSelected_shipping('SPX_Express_Express')}/></span>
                                         </label>
-                                        <p className="bg-gray-100 p-5 rounded-md text-gray-600 text-justify text-sm">Estimated delivery: 7–14 business days (includes order preparation and shipping). May arrive earlier. If your parcel hasn’t arrived after this period, please contact us.</p>
+                                        <p className="bg-gray-100 p-5 rounded-md text-gray-600 text-justify text-sm dark:bg-gray-800 dark:text-gray-400">Estimated delivery: 7–14 business days (includes order preparation and shipping). May arrive earlier. If your parcel hasn’t arrived after this period, please contact us.</p>
                                     </div>
                                 ) }
                             </div>
                         </div>
                             {/* second Box */}
-                        <div className="mt-3 pb-5 lg:order-4 lg:col-span-2  lg:pr-10 lg:pl-20 xl:pl-30">
+                        <div className="mt-5 pb-5 lg:order-4 lg:col-span-2  lg:pr-10 lg:pl-20 xl:pl-30">
                             <p className="text-lg font-semibold">Payment method</p>
-                            <label htmlFor="gcash" className="flex items-center w-full justify-between py-5 px-5 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-200 transition duration-500">
-                                <span className="flex items-center"><img src="/Logo/gcash.svg" alt="Gcash Logo" className=" w-8 h-8 lg:w-10 lg:h-10 mr-3"/>Gcash</span> 
+                            <label htmlFor="gcash" className="flex items-center w-full justify-between py-5 px-5 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-200 transition duration-500 dark:hover:bg-gray-900">
+                                <span className="flex items-center"><img src="/Logo/gcash.svg" alt="gcash Logo" className=" w-8 h-8 lg:w-10 lg:h-10 mr-3"/>gcash</span> 
                                 <span><input type="radio" id="gcash" className="h-4 w-4 accent-blue-500" value="gcash" checked={selected_payment === "gcash"} onChange={() => setSelected_payment('gcash')}/></span>
                             </label>
-                            <label htmlFor="maya" className="flex items-center w-full justify-between py-5 px-5 border border-gray-300 rounded-md mt-3 cursor-pointer hover:bg-gray-200 transition duration-500">
-                                <span className="flex items-center"><img src="/Logo/maya.svg" alt="Maya Logo" className="w-8 h-8 lg:w-10 lg:h-10 mr-3"/>Maya</span> 
+                            <label htmlFor="maya" className="flex items-center w-full justify-between py-5 px-5 border border-gray-300 rounded-md mt-3 cursor-pointer hover:bg-gray-200 transition duration-500 dark:hover:bg-gray-900">
+                                <span className="flex items-center"><img src="/Logo/maya.svg" alt="maya Logo" className="w-8 h-8 lg:w-10 lg:h-10 mr-3"/>maya</span> 
                                 <span><input type="radio" id="maya" className="h-4 w-4 accent-blue-500"  value="maya" checked={selected_payment === "maya"} onChange={() => setSelected_payment('maya')}/></span>
                             </label>
-                            <label htmlFor="card" className="flex items-center w-full justify-between py-5 px-5 border border-gray-300 rounded-md mt-3 cursor-pointer hover:bg-gray-200 transition duration-500">
-                                <span className="flex items-center"><Wallet size={20} className="mr-3"/> Debit/Credit Card</span> 
+                            <label htmlFor="card" className="flex items-center w-full justify-between py-5 px-5 border border-gray-300 rounded-md mt-3 cursor-pointer hover:bg-gray-200 transition duration-500 dark:hover:bg-gray-900">
+                                <span className="flex items-center"><Wallet size={20} className="mr-3"/> Debit/Credit card</span> 
                                 <span><input type="radio" id="card" className="h-4 w-4 accent-blue-500"  value="card" checked={selected_payment === "card"} onChange={() => setSelected_payment('card')}/></span>
                             </label>
                             {selected_cities === "31420" ? (
-                                <label htmlFor="COD" className="flex items-center w-full justify-between py-5 px-5 border border-gray-300 rounded-md mt-3 cursor-pointer hover:bg-gray-200 transition duration-500">
-                                    <span className="flex items-center"><HandCoins size={20} className="mr-3"/> Cash on Delivery (COD)</span> 
-                                    <span><input type="radio" id="COD" className="h-4 w-4 accent-blue-500"  value="COD" checked={selected_payment === "COD"} onChange={() => setSelected_payment('COD')}/></span>
+                                <label htmlFor="cod" className="flex items-center w-full justify-between py-5 px-5 border border-gray-300 rounded-md mt-3 cursor-pointer hover:bg-gray-200 transition duration-500 dark:hover:bg-gray-900">
+                                    <span className="flex items-center"><HandCoins size={20} className="mr-3"/> Cash on Delivery (cod)</span> 
+                                    <span><input type="radio" id="cod" className="h-4 w-4 accent-blue-500"  value="cod" checked={selected_payment === "cod"} onChange={() => setSelected_payment('cod')}/></span>
                                 </label>
                             ) :(
-                                <label htmlFor="COD" className="flex items-center w-full justify-between py-5 px-5 border border-gray-300 bg-gray-200 text-gray-500 rounded-md mt-3 pointer-events-none">
-                                    <span className="flex items-center"><HandCoins size={20} className="mr-3"/> Cash on Delivery (COD)</span> 
-                                    <span><input type="radio" id="COD" className="h-4 w-4 accent-blue-500"  value="COD" checked={selected_payment === "COD"} onChange={() => setSelected_payment('COD')}/></span>
+                                <label htmlFor="cod" className="flex items-center w-full justify-between py-5 px-5 border border-gray-300 bg-gray-200 text-gray-500 rounded-md mt-3 pointer-events-none dark:bg-gray-800 dark:border-none dark:text-gray-400">
+                                    <span className="flex items-center"><HandCoins size={20} className="mr-3"/> Cash on Delivery (cod)</span> 
+                                    <span><input type="radio" id="cod" className="h-4 w-4 accent-blue-500"  value="cod" checked={selected_payment === "cod"} onChange={() => setSelected_payment('cod')}/></span>
                                 </label>
                             )}
                         </div>
@@ -365,15 +426,15 @@ export default function Check_Out(){
                             </div>
                             <div className="flex justify-between mb-2">
                                 <span>Subtotal</span>
-                                <span className="flex items-center"><PhilippinePeso size={16} /> {subtotal}</span>
+                                <span className="flex items-center"><PhilippinePeso size={16} /> {subtotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                             </div>
                             <div className="flex  justify-between mb-2">
                                 <span className="text-sm">Delivery/Shipping</span>
-                                {shippingFee === 1 ? <p>Free</p> : shippingFee === 0 ? <span className="flex items-center text-sm text-gray-600 italic">Please fill up address first</span>  : <span className="flex items-center"><PhilippinePeso size={16} />{shippingFee}</span> }
+                                {selected_barangay === FREE_BARANGAYS[0] ? <p>Free</p> : shippingFee === 0 ? <span className="flex items-center text-sm text-gray-600 italic">Please fill up address first</span>  : <span className="flex items-center"><PhilippinePeso size={16} />{shippingFee}</span> }
                             </div>
                             <div className="flex justify-between font-semibold text-lg mt-4">
                                 <span>Total</span>
-                                <span className="flex items-center"><PhilippinePeso size={18} /> {totalPayment}</span>
+                                <span className="flex items-center"><PhilippinePeso size={18} /> {totalPayment.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                             </div>
                         </div>
                             {/* fourth Box */}
